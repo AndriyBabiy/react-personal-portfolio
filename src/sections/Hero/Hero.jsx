@@ -2,10 +2,12 @@ import styles from "./HeroStyles.module.css";
 import heroImg from "../../assets/hero-img.png";
 import sun from "../../assets/sun.svg";
 import moon from "../../assets/moon.svg";
-import twitterLight from "../../assets/twitter-light.svg";
+// import twitterLight from "../../assets/twitter-light.svg";
+import emailLight from "../../assets/email-light.svg";
+import emailDark from "../../assets/email-dark.svg";
 import githubLight from "../../assets/github-light.svg";
 import linkedinLight from "../../assets/linkedin-light.svg";
-import twitterDark from "../../assets/twitter-dark.svg";
+// import twitterDark from "../../assets/twitter-dark.svg";
 import githubDark from "../../assets/github-dark.svg";
 import linkedinDark from "../../assets/linkedin-dark.svg";
 import CV from "../../assets/Andriy Babiy  - 20240919.pdf";
@@ -15,7 +17,7 @@ function Hero() {
   const { theme, toggleTheme } = useTheme();
 
   const themeIcon = theme === "light" ? sun : moon;
-  const twitterIcon = theme === "light" ? twitterLight : twitterDark;
+  const emailIcon = theme === "light" ? emailLight : emailDark;
   const githubIcon = theme === "light" ? githubLight : githubDark;
   const linkedinIcon = theme === "light" ? linkedinLight : linkedinDark;
 
@@ -36,8 +38,8 @@ function Hero() {
         </h1>
         <h2>Frontend Developer</h2>
         <span>
-          <a href="https://x.com/babiy_andriy" target="_blank">
-            <img src={twitterIcon} alt="Twitter icon" />
+          <a href="mailto:me@andriybabiy.com" target="_blank">
+            <img src={emailIcon} alt="Email icon" />
           </a>
           <a href="https://github.com/AndriyBabiy" target="_blank">
             <img src={githubIcon} alt="Github icon" />
