@@ -10,7 +10,7 @@ import linkedinLight from "../../assets/linkedin-light.svg";
 // import twitterDark from "../../assets/twitter-dark.svg";
 import githubDark from "../../assets/github-dark.svg";
 import linkedinDark from "../../assets/linkedin-dark.svg";
-import CV from "../../assets/Andriy Babiy  - 20240919.pdf";
+import CV from "../../assets/Andriy Babiy - JSE.pdf";
 import { useTheme } from "../../common/ThemeContext";
 
 function Hero() {
@@ -36,7 +36,7 @@ function Hero() {
         <h1>
           Andriy <br /> Babiy
         </h1>
-        <h2>Frontend Developer</h2>
+        <h2>Jr. Software Engineer</h2>
         <span>
           <a href="mailto:me@andriybabiy.com" target="_blank">
             <img src={emailIcon} alt="Email icon" />
