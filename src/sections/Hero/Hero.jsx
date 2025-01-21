@@ -10,7 +10,7 @@ import linkedinLight from "../../assets/linkedin-light.svg";
 // import twitterDark from "../../assets/twitter-dark.svg";
 import githubDark from "../../assets/github-dark.svg";
 import linkedinDark from "../../assets/linkedin-dark.svg";
-import CV from "../../assets/Andriy Babiy - JSE.pdf";
+import CV from "../../assets/Andriy Babiy - 20250121.pdf";
 import { useTheme } from "../../common/ThemeContext";
 
 function Hero() {
@@ -36,7 +36,13 @@ function Hero() {
         <h1>
           Andriy <br /> Babiy
         </h1>
-        <h2>Jr. Software Engineer</h2>
+        <h2>
+          Software Development
+          <br />
+          Growth Marketing
+          <br />
+          Machine Learning
+        </h2>
         <span>
           <a href="mailto:me@andriybabiy.com" target="_blank">
             <img src={emailIcon} alt="Email icon" />
@@ -49,10 +55,10 @@ function Hero() {
           </a>
         </span>
         <p className={styles.description}>
-          With a passion for developing modern React web apps for commercial
-          businesses
+          Passion for developing digital products and experiences that leave a
+          lasting impact.
         </p>
-        <a href={CV} download>
+        <a href={CV} target="_blank">
           <button className="hover">Resume</button>
         </a>
       </div>
