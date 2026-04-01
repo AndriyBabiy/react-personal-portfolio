@@ -67,8 +67,9 @@ jobs:
       - name: Smoke test
         env:
           VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
         run: |
           sleep 5
-          curl -f "http://$VPS_HOST:8090/" || exit 1
-          curl -f "http://$VPS_HOST:8090/desktop" || exit 1
+          ssh -o StrictHostKeyChecking=no "$VPS_USER@$VPS_HOST" 'curl -sf http://127.0.0.1:8090/ | head -1' || exit 1
+          ssh -o StrictHostKeyChecking=no "$VPS_USER@$VPS_HOST" 'curl -sf http://127.0.0.1:8090/desktop | head -1' || exit 1
           echo "Deployment successful!"
