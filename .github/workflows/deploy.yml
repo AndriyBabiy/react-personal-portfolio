@@ -1,0 +1,84 @@
+name: Deploy Portfolio
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  IMAGE_NAME: ghcr.io/${{ github.repository }}
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        env:
+          FULL_IMAGE: ${{ env.IMAGE_NAME }}
+          SHA: ${{ github.sha }}
+        run: |
+          docker build -t "$FULL_IMAGE:latest" -t "$FULL_IMAGE:$SHA" .
+          docker push "$FULL_IMAGE" --all-tags
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Start ssh-agent and add key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
+
+      - name: Copy compose file to VPS
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+        run: |
+          cat > /tmp/docker-compose.yml <<'COMPOSE'
+          services:
+            portfolio:
+              image: ghcr.io/andriybabiy/react-personal-portfolio:latest
+              ports:
+                - "8090:80"
+              restart: always
+          COMPOSE
+          ssh -o StrictHostKeyChecking=no "$VPS_USER@$VPS_HOST" 'sudo mkdir -p /opt/portfolio'
+          scp -o StrictHostKeyChecking=no /tmp/docker-compose.yml "$VPS_USER@$VPS_HOST:/tmp/portfolio-compose.yml"
+          ssh -o StrictHostKeyChecking=no "$VPS_USER@$VPS_HOST" 'sudo mv /tmp/portfolio-compose.yml /opt/portfolio/docker-compose.yml'
+
+      - name: Pull image and restart on VPS
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          FULL_IMAGE: ${{ env.IMAGE_NAME }}
+        run: |
+          ssh -o StrictHostKeyChecking=no "$VPS_USER@$VPS_HOST" "\
+            set -euo pipefail; \
+            sudo docker pull ghcr.io/andriybabiy/react-personal-portfolio:latest; \
+            cd /opt/portfolio; \
+            sudo docker compose up -d; \
+          "
+
+      - name: Smoke test
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+        run: |
+          sleep 5
+          curl -f "http://$VPS_HOST:8090/" || exit 1
+          curl -f "http://$VPS_HOST:8090/desktop" || exit 1
+          echo "Deployment successful!"

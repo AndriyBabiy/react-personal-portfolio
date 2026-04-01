@@ -1,21 +1,23 @@
 :root {
-  --background-color: #fff;
-  --btn-color: #0987f2;
+  --background-color: #fafafa;
+  --btn-color: #18181b;
   --btn-text-color: #fff;
-  --project-card-bg: #ffffff00;
-  --text-color: #222;
-  --form-text-color: #555;
-  --footer-text-color: #888;
+  --project-card-bg: rgba(0, 0, 0, 0.04);
+  --text-color: #18181b;
+  --form-text-color: #515154;
+  --footer-text-color: #86868b;
+  --accent-color: #2563EB;
 }
 
 [data-theme="dark"] {
-  --background-color: #222;
-  --btn-color: #fff;
-  --btn-text-color: #222;
-  --project-card-bg: #fff;
-  --text-color: #fff;
-  --form-text-color: #fff;
-  --footer-text-color: #bbb;
+  --background-color: #0a0a0a;
+  --btn-color: #fafafa;
+  --btn-text-color: #0a0a0a;
+  --project-card-bg: rgba(255, 255, 255, 0.06);
+  --text-color: #fafafa;
+  --form-text-color: #a1a1aa;
+  --footer-text-color: #71717a;
+  --accent-color: #60A5FA;
 }
 
 body {
@@ -23,6 +25,7 @@ body {
   display: flex;
   justify-content: center;
   margin: 0 auto 60px;
+  transition: background-color 200ms ease;
 }
 
 #root {
@@ -66,10 +69,13 @@ p {
   font-weight: 300;
 }
 
-sectionTitle {
-  margin-bottom: 30px;
-}
-
 .hover {
   cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

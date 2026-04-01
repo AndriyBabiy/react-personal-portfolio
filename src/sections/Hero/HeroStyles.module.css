@@ -6,6 +6,7 @@
   text-align: center;
   height: 100dvh;
   min-height: 500px;
+  animation: fadeInUp 0.6s ease-out both;
 
   .hero {
     max-width: 200px;
@@ -21,6 +22,12 @@
 
       img {
         width: 30px;
+        transition: transform 200ms ease, opacity 200ms ease;
+      }
+
+      img:hover {
+        transform: scale(1.15);
+        opacity: 0.7;
       }
     }
   }
@@ -69,10 +76,38 @@
 
 .description {
   max-width: 24ch;
+  align-self: center;
 }
 
 .info {
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.desktopLink {
+  font-family: "Roboto Mono", monospace;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-color);
+  text-decoration: none;
+  border: 1px solid var(--btn-color);
+  padding: 8px 18px;
+  border-radius: 20px;
+  opacity: 0.6;
+  transition: opacity 200ms ease, color 200ms ease, border-color 200ms ease;
+  cursor: pointer;
+}
+
+.desktopLink:hover {
+  opacity: 1;
+  color: #2563EB;
+  border-color: #2563EB;
 }

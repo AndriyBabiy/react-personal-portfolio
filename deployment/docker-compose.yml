@@ -1,0 +1,6 @@
+services:
+  portfolio:
+    image: ghcr.io/andriybabiy/react-personal-portfolio:latest
+    ports:
+      - "8090:80"
+    restart: always

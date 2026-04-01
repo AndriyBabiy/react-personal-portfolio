@@ -1,0 +1,102 @@
+.about-app {
+  padding: 24px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.about-hero {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.about-hero h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1d1d1f;
+  margin: 0 0 4px;
+}
+
+.about-tagline {
+  font-size: 14px;
+  color: #86868b;
+  margin: 0;
+}
+
+.about-section {
+  margin-bottom: 20px;
+}
+
+.about-section h3 {
+  font-size: 13px;
+  font-weight: 600;
+  color: #86868b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 8px;
+}
+
+.about-section p {
+  font-size: 14px;
+  color: #1d1d1f;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.skills-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.skill-group h4 {
+  font-size: 12px;
+  font-weight: 600;
+  color: #515154;
+  margin: 0 0 6px;
+}
+
+.skill-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.skill-pill {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.04);
+  color: #1d1d1f;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.about-links {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.about-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #1d1d1f;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.15s ease;
+  cursor: pointer;
+}
+
+.about-link:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.about-link svg {
+  color: #515154;
+  flex-shrink: 0;
+}

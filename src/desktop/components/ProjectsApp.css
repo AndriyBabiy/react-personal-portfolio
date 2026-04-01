@@ -1,0 +1,86 @@
+.projects-app {
+  padding: 24px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.projects-header {
+  margin-bottom: 20px;
+}
+
+.projects-header h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1d1d1f;
+  margin: 0 0 4px;
+}
+
+.projects-header p {
+  font-size: 13px;
+  color: #86868b;
+  margin: 0;
+}
+
+.projects-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.project-card {
+  display: block;
+  padding: 16px;
+  background: white;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  cursor: pointer;
+}
+
+.project-card:hover {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
+}
+
+.project-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.project-card-header h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1d1d1f;
+  margin: 0;
+}
+
+.project-card-header svg {
+  color: #86868b;
+  flex-shrink: 0;
+}
+
+.project-card p {
+  font-size: 13px;
+  color: #515154;
+  line-height: 1.5;
+  margin: 0 0 10px;
+}
+
+.project-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.project-tag {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(0, 122, 255, 0.08);
+  color: #007AFF;
+}

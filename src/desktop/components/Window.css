@@ -1,0 +1,164 @@
+.window {
+  background: rgba(246, 246, 246, 0.92);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-radius: 10px;
+  box-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.12),
+    0 22px 70px 4px rgba(0, 0, 0, 0.25),
+    0 0 0.5px 0 rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  min-width: 300px;
+  min-height: 200px;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  animation: windowOpen 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes windowOpen {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.window.maximized {
+  border-radius: 0;
+}
+
+.window-header {
+  height: 36px;
+  background: linear-gradient(180deg, rgba(252, 252, 252, 0.95) 0%, rgba(238, 238, 238, 0.95) 100%);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  cursor: move;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.window-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  z-index: 1;
+}
+
+.window-control {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 0.5px solid rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  transition: filter 0.15s ease;
+  position: relative;
+}
+
+.window-control::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.window:hover .window-control.close::after {
+  content: '×';
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(80, 0, 0, 0.8);
+  opacity: 1;
+}
+
+.window:hover .window-control.minimize::after {
+  content: '−';
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(100, 60, 0, 0.8);
+  opacity: 1;
+}
+
+.window:hover .window-control.maximize::after {
+  content: '+';
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(0, 60, 0, 0.8);
+  opacity: 1;
+}
+
+.window-control.close {
+  background: linear-gradient(180deg, #FF6058, #E14640);
+}
+
+.window-control.minimize {
+  background: linear-gradient(180deg, #FFC130, #E0A828);
+}
+
+.window-control.maximize {
+  background: linear-gradient(180deg, #2ACB42, #1AAD29);
+}
+
+.window-control:hover {
+  filter: brightness(1.1);
+}
+
+.window.inactive .window-control.close,
+.window.inactive .window-control.minimize,
+.window.inactive .window-control.maximize {
+  background: #d4d4d4;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.window.inactive .window-header {
+  background: linear-gradient(180deg, rgba(248, 248, 248, 0.95) 0%, rgba(240, 240, 240, 0.95) 100%);
+}
+
+.window.inactive {
+  box-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.08),
+    0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.window-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.85);
+  pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 60%;
+}
+
+.window-content {
+  flex: 1;
+  overflow: auto;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+}
+
+.resize-handle {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 16px;
+  height: 16px;
+  cursor: se-resize;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .window {
+    animation: none;
+  }
+}

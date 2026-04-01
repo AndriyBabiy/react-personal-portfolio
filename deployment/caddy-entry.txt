@@ -1,0 +1,9 @@
+# Add this block to the existing Caddyfile on the Hetzner VPS (78.47.89.101)
+# Location: typically /etc/caddy/Caddyfile
+#
+# Caddy will auto-provision HTTPS via Let's Encrypt.
+# Prerequisite: DNS A record for andriybabiy.com -> 78.47.89.101
+
+andriybabiy.com {
+    reverse_proxy localhost:8090
+}

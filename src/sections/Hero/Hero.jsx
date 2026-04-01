@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import styles from "./HeroStyles.module.css";
 import heroImg from "../../assets/hero-img.png";
 import sun from "../../assets/sun.svg";
@@ -58,9 +59,14 @@ function Hero() {
           Passion for developing digital products and experiences that leave a
           lasting impact.
         </p>
-        <a href={CV} target="_blank">
-          <button className="hover">Resume</button>
-        </a>
+        <div className={styles.actions}>
+          <a href={CV} target="_blank">
+            <button className="hover">Resume</button>
+          </a>
+          <Link to="/desktop" className={styles.desktopLink}>
+            Try the Desktop Experience &rarr;
+          </Link>
+        </div>
       </div>
     </section>
   );

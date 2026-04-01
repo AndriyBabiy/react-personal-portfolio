@@ -1,13 +1,14 @@
+import { Routes, Route } from "react-router";
+import HomePage from "./pages/HomePage";
+import DesktopPage from "./pages/DesktopPage";
 import "./App.css";
-import Hero from "./sections/Hero/Hero";
-// import Projects from "./sections/Projects/Projects";
 
 function App() {
   return (
-    <>
-      <Hero></Hero>
-      {/* <Projects></Projects> */}
-    </>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/desktop" element={<DesktopPage />} />
+    </Routes>
   );
 }
 
