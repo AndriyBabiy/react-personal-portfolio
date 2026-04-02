@@ -1,4 +1,5 @@
 import './ContactApp.css';
+import { profile } from '../../data/content';
 
 const ContactApp = () => {
   return (
@@ -10,7 +11,7 @@ const ContactApp = () => {
 
       <div className="contact-cards">
         <a
-          href="mailto:me@andriybabiy.com"
+          href={"mailto:" + profile.email}
           className="contact-card"
         >
           <div className="contact-icon" style={{ background: 'linear-gradient(135deg, #007AFF, #0051D5)' }}>
@@ -21,12 +22,12 @@ const ContactApp = () => {
           </div>
           <div className="contact-info">
             <span className="contact-label">Email</span>
-            <span className="contact-value">me@andriybabiy.com</span>
+            <span className="contact-value">{profile.email}</span>
           </div>
         </a>
 
         <a
-          href="https://github.com/AndriyBabiy"
+          href={profile.github}
           target="_blank"
           rel="noopener noreferrer"
           className="contact-card"
@@ -38,12 +39,12 @@ const ContactApp = () => {
           </div>
           <div className="contact-info">
             <span className="contact-label">GitHub</span>
-            <span className="contact-value">@AndriyBabiy</span>
+            <span className="contact-value">{"@" + profile.github.split("/").pop()}</span>
           </div>
         </a>
 
         <a
-          href="https://www.linkedin.com/in/andriy-babiy/"
+          href={profile.linkedin}
           target="_blank"
           rel="noopener noreferrer"
           className="contact-card"
@@ -55,7 +56,7 @@ const ContactApp = () => {
           </div>
           <div className="contact-info">
             <span className="contact-label">LinkedIn</span>
-            <span className="contact-value">andriy-babiy</span>
+            <span className="contact-value">{profile.linkedin.split("/in/")[1]?.replace("/", "")}</span>
           </div>
         </a>
       </div>

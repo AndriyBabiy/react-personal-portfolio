@@ -1,29 +1,6 @@
 import styles from "./ProjectsStyles.module.css";
 import { useTheme } from "../../common/ThemeContext";
-
-const projects = [
-  {
-    title: "Study.ie",
-    description:
-      "EdTech platform for students in Ireland to find courses, compare colleges, and get AI-powered guidance.",
-    tags: ["React", "Node.js", "AI"],
-    link: "https://study.ie",
-  },
-  {
-    title: "macOS Portfolio",
-    description:
-      "A creative portfolio built as a macOS-inspired operating system in the browser with draggable windows and a dock.",
-    tags: ["React 19", "Vite", "CSS"],
-    link: "https://github.com/AndriyBabiy/macOS-personal-portfolio",
-  },
-  {
-    title: "Portfolio Site",
-    description:
-      "This clean, minimal portfolio site with dark/light mode toggle and responsive design.",
-    tags: ["React", "CSS Modules", "Vite"],
-    link: "https://github.com/AndriyBabiy/react-personal-portfolio",
-  },
-];
+import { projects } from "../../data/content";
 
 const Projects = () => {
   const { theme } = useTheme();

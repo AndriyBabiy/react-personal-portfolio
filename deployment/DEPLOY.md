@@ -4,11 +4,40 @@
 
 - **App**: React SPA served by nginx inside a Docker container
 - **VPS**: Hetzner Cloud cpx42 at 78.47.89.101 (shared with Cuigg + Study.ie)
-- **Reverse Proxy**: nginx (NOT Caddy)
+- **Reverse Proxy**: nginx (NOT Caddy — Caddy is inactive on this VPS)
 - **SSL**: Cloudflare Origin Certificate (proxied mode, Full Strict)
 - **Domain**: andriybabiy.com (Cloudflare DNS)
+- **CI/CD**: GitHub Actions → GHCR → SSH to VPS → docker pull → restart
 
-## Deploy (Manual)
+## CI/CD (Automatic)
+
+Push to `main` auto-deploys. Workflow: `.github/workflows/deploy.yml`
+
+```bash
+# Monitor runs
+gh run list --limit 3 -R AndriyBabiy/react-personal-portfolio
+
+# Re-run failed
+gh run rerun <run-id> -R AndriyBabiy/react-personal-portfolio
+```
+
+### GitHub Secrets Required
+
+| Secret | Value |
+|--------|-------|
+| `VPS_SSH_KEY` | `~/.ssh/studyie_vps` private key |
+| `VPS_HOST` | `78.47.89.101` |
+| `VPS_USER` | `deploy` |
+
+### CI/CD Troubleshooting
+
+| Error | Cause | Fix |
+|-------|-------|-----|
+| `repository name must be lowercase` | `github.repository` returns mixed case | Hardcode lowercase image name |
+| `sudo: a password is required` | sudoers only allows specific paths | Use `~/portfolio` (no sudo) for compose files |
+| `Failed to connect to port 8090` | Port bound to 127.0.0.1 only | Smoke test via SSH + curl localhost |
+
+## Deploy (Manual fallback)
 
 ```bash
 # 1. Build for amd64 (required — VPS is amd64, Mac is arm64)

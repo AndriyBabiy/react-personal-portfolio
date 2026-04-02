@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { Link } from "react-router";
 import styles from "./HeroStyles.module.css";
 import heroImg from "../../assets/hero-img.png";
@@ -11,8 +12,8 @@ import linkedinLight from "../../assets/linkedin-light.svg";
 // import twitterDark from "../../assets/twitter-dark.svg";
 import githubDark from "../../assets/github-dark.svg";
 import linkedinDark from "../../assets/linkedin-dark.svg";
-import CV from "../../assets/Andriy Babiy - 20250121.pdf";
 import { useTheme } from "../../common/ThemeContext";
+import { profile } from "../../data/content";
 
 function Hero() {
   const { theme, toggleTheme } = useTheme();
@@ -35,32 +36,32 @@ function Hero() {
       </div>
       <div className={styles.info}>
         <h1>
-          Andriy <br /> Babiy
+          {profile.firstName} <br /> {profile.lastName}
         </h1>
         <h2>
-          Software Development
-          <br />
-          Growth Marketing
-          <br />
-          Machine Learning
+          {profile.roles.map((role, i) => (
+            <Fragment key={role}>
+              {role}
+              {i < profile.roles.length - 1 && <br />}
+            </Fragment>
+          ))}
         </h2>
         <span>
-          <a href="mailto:me@andriybabiy.com" target="_blank">
+          <a href={`mailto:${profile.email}`} target="_blank">
             <img src={emailIcon} alt="Email icon" />
           </a>
-          <a href="https://github.com/AndriyBabiy" target="_blank">
+          <a href={profile.github} target="_blank">
             <img src={githubIcon} alt="Github icon" />
           </a>
-          <a href="https://www.linkedin.com/in/andriy-babiy/" target="_blank">
+          <a href={profile.linkedin} target="_blank">
             <img src={linkedinIcon} alt="Linkedin icon" />
           </a>
         </span>
         <p className={styles.description}>
-          Passion for developing digital products and experiences that leave a
-          lasting impact.
+          {profile.bio}
         </p>
         <div className={styles.actions}>
-          <a href={CV} target="_blank">
+          <a href={profile.cvPath} target="_blank">
             <button className="hover">Resume</button>
           </a>
           <Link to="/desktop" className={styles.desktopLink}>

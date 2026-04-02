@@ -1,25 +1,5 @@
 import './ProjectsApp.css';
-
-const projects = [
-  {
-    title: 'Study.ie',
-    description: 'EdTech platform for students in Ireland to find courses, compare colleges, and get AI-powered guidance.',
-    tags: ['React', 'Node.js', 'AI'],
-    link: 'https://study.ie',
-  },
-  {
-    title: 'macOS Portfolio',
-    description: 'This site — a creative portfolio built as a macOS-inspired operating system in the browser.',
-    tags: ['React', 'Vite', 'CSS'],
-    link: 'https://github.com/AndriyBabiy/macOS-personal-portfolio',
-  },
-  {
-    title: 'React Portfolio',
-    description: 'A clean, minimal portfolio site with dark/light mode toggle and responsive design.',
-    tags: ['React', 'CSS Modules', 'Vite'],
-    link: 'https://github.com/AndriyBabiy/react-personal-portfolio',
-  },
-];
+import { projects } from '../../data/content';
 
 const ExternalLinkIcon = () => (
   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
