@@ -29,8 +29,13 @@ jobs:
         env:
           FULL_IMAGE: ghcr.io/andriybabiy/react-personal-portfolio
           SHA: ${{ github.sha }}
+          VITE_GITHUB_CLIENT_ID: ${{ secrets.VITE_GITHUB_CLIENT_ID }}
+          VITE_AUTH_WORKER_URL: ${{ secrets.VITE_AUTH_WORKER_URL }}
         run: |
-          docker build -t "$FULL_IMAGE:latest" -t "$FULL_IMAGE:$SHA" .
+          docker build \
+            --build-arg VITE_GITHUB_CLIENT_ID="$VITE_GITHUB_CLIENT_ID" \
+            --build-arg VITE_AUTH_WORKER_URL="$VITE_AUTH_WORKER_URL" \
+            -t "$FULL_IMAGE:latest" -t "$FULL_IMAGE:$SHA" .
           docker push "$FULL_IMAGE" --all-tags
 
   deploy:
