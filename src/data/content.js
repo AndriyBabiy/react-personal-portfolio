@@ -11,6 +11,8 @@ export const profile = {
   github: "https://github.com/AndriyBabiy",
   linkedin: "https://www.linkedin.com/in/andriy-babiy/",
   cvPath: "/cv.pdf",
+  videoPath: "/video.mp4",
+  profileImage: "/profile.png",
 };
 
 export const projects = [
@@ -35,6 +37,12 @@ export const projects = [
     tags: ["React", "CSS Modules", "Vite"],
     link: "https://andriybabiy.com",
   },
+];
+
+export const desktopBackgrounds = [
+  "/backgrounds/IMG_2659.AVIF",
+  "/backgrounds/IMG_2658.AVIF",
+  "/backgrounds/default.jpg",
 ];
 
 export const skills = [

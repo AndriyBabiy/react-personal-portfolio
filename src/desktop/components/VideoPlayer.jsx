@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { profile } from '../../data/content';
 import './VideoPlayer.css';
 
 const VideoPlayer = () => {
@@ -72,7 +73,7 @@ const VideoPlayer = () => {
         onPlay={handlePlay}
         onPause={handlePause}
       >
-        <source src="/video.mp4" type="video/mp4" />
+        <source src={profile.videoPath} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
       

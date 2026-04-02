@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router";
-import { profile as initialProfile, projects as initialProjects, skills as initialSkills } from "../data/content";
+import { profile as initialProfile, projects as initialProjects, skills as initialSkills, desktopBackgrounds as initialBackgrounds } from "../data/content";
 import ProfileEditor from "../editor/ProfileEditor";
 import ProjectsEditor from "../editor/ProjectsEditor";
 import SkillsEditor from "../editor/SkillsEditor";
+import MediaEditor from "../editor/MediaEditor";
 import ExportButton from "../editor/ExportButton";
 import "../editor/ContentEditor.css";
 
@@ -11,7 +12,7 @@ const GITHUB_CLIENT_ID = import.meta.env.VITE_GITHUB_CLIENT_ID || "";
 const AUTH_WORKER_URL = import.meta.env.VITE_AUTH_WORKER_URL || "https://auth.andriybabiy.com";
 const REDIRECT_URI = `${window.location.origin}/edit`;
 
-const TABS = ["Profile", "Projects", "Skills"];
+const TABS = ["Profile", "Projects", "Skills", "Media"];
 
 function LoginPrompt() {
   const handleLogin = () => {
@@ -67,6 +68,8 @@ function EditorPage() {
   const [profile, setProfile] = useState({ ...initialProfile, roles: [...initialProfile.roles] });
   const [projects, setProjects] = useState(initialProjects.map((p) => ({ ...p, tags: [...p.tags] })));
   const [skills, setSkills] = useState(initialSkills.map((s) => ({ ...s, items: [...s.items] })));
+  const [desktopBackgrounds] = useState([...initialBackgrounds]);
+  const [mediaFiles, setMediaFiles] = useState({ profileImage: null, cv: null, video: null, backgrounds: [] });
 
   useEffect(() => {
     // Check sessionStorage for existing session
@@ -131,7 +134,7 @@ function EditorPage() {
               style={{ width: 24, height: 24, borderRadius: "50%" }}
             />
           )}
-          <ExportButton profile={profile} projects={projects} skills={skills} />
+          <ExportButton profile={profile} projects={projects} skills={skills} mediaFiles={mediaFiles} desktopBackgrounds={desktopBackgrounds} />
         </div>
       </div>
 
@@ -158,6 +161,9 @@ function EditorPage() {
             {activeTab === "Skills" && (
               <SkillsEditor skills={skills} onChange={setSkills} />
             )}
+            {activeTab === "Media" && (
+              <MediaEditor profile={profile} mediaFiles={mediaFiles} onMediaChange={setMediaFiles} />
+            )}
           </div>
         </div>
 
@@ -165,6 +171,11 @@ function EditorPage() {
           <div className="preview-frame">
             <div style={{ padding: "40px 20px", maxWidth: 700, margin: "0 auto" }}>
               <div style={{ textAlign: "center", marginBottom: 40 }}>
+                <img
+                  src={mediaFiles.profileImage ? URL.createObjectURL(mediaFiles.profileImage) : profile.profileImage}
+                  alt="Profile"
+                  style={{ width: 120, height: 120, borderRadius: "50%", objectFit: "cover", marginBottom: 16 }}
+                />
                 <h1 style={{ fontFamily: "'Rubik', sans-serif", fontSize: 32, textTransform: "uppercase", margin: "0 0 12px" }}>
                   {profile.firstName}<br />{profile.lastName}
                 </h1>

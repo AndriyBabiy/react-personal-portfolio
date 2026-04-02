@@ -7,6 +7,7 @@ import VideoPlayer from "./components/VideoPlayer";
 import ProjectsApp from "./components/ProjectsApp";
 import AboutApp from "./components/AboutApp";
 import ContactApp from "./components/ContactApp";
+import { desktopBackgrounds } from "../data/content";
 import "./Desktop.css";
 
 const WINDOW_SIZES = {
@@ -36,9 +37,7 @@ function Desktop() {
 
   const changeBackground = () => {
     const backgrounds = [
-      "/backgrounds/IMG_2659.AVIF",
-      "/backgrounds/IMG_2658.AVIF",
-      "/backgrounds/default.jpg",
+      ...desktopBackgrounds,
       "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
       "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
       "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
