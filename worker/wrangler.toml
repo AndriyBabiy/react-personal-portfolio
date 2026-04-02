@@ -1,0 +1,10 @@
+name = "portfolio-auth"
+main = "auth-worker.js"
+compatibility_date = "2024-01-01"
+
+routes = [
+  { pattern = "andriybabiy.com/api/auth/*", zone_name = "andriybabiy.com" }
+]
+
+# Secrets (set via: npx wrangler secret put GITHUB_CLIENT_ID / GITHUB_CLIENT_SECRET)
+# Do NOT put secrets in this file

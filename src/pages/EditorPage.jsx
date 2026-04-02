@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router";
 import { profile as initialProfile, projects as initialProjects, skills as initialSkills } from "../data/content";
 import ProfileEditor from "../editor/ProfileEditor";
@@ -7,13 +7,111 @@ import SkillsEditor from "../editor/SkillsEditor";
 import ExportButton from "../editor/ExportButton";
 import "../editor/ContentEditor.css";
 
+const GITHUB_CLIENT_ID = import.meta.env.VITE_GITHUB_CLIENT_ID || "";
+const AUTH_WORKER_URL = import.meta.env.VITE_AUTH_WORKER_URL || "https://auth.andriybabiy.com";
+const REDIRECT_URI = `${window.location.origin}/edit`;
+
 const TABS = ["Profile", "Projects", "Skills"];
 
+function LoginPrompt() {
+  const handleLogin = () => {
+    const params = new URLSearchParams({
+      client_id: GITHUB_CLIENT_ID,
+      redirect_uri: REDIRECT_URI,
+      scope: "read:user",
+    });
+    window.location.href = `https://github.com/login/oauth/authorize?${params}`;
+  };
+
+  return (
+    <div className="editor-page">
+      <div className="auth-gate">
+        <div className="auth-card">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" style={{ marginBottom: 16 }}>
+            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+          </svg>
+          <h2>Content Editor</h2>
+          <p>Sign in with GitHub to access the editor.</p>
+          <button className="btn btn-primary auth-btn" onClick={handleLogin}>
+            Sign in with GitHub
+          </button>
+          <Link to="/" className="editor-back" style={{ marginTop: 16, display: "inline-block" }}>
+            &larr; Back to portfolio
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AccessDenied() {
+  return (
+    <div className="editor-page">
+      <div className="auth-gate">
+        <div className="auth-card">
+          <h2>Access Denied</h2>
+          <p>This editor is only available to the site owner.</p>
+          <Link to="/" className="btn btn-secondary" style={{ marginTop: 12, display: "inline-block", textDecoration: "none" }}>
+            Back to portfolio
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function EditorPage() {
+  const [user, setUser] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Profile");
   const [profile, setProfile] = useState({ ...initialProfile, roles: [...initialProfile.roles] });
   const [projects, setProjects] = useState(initialProjects.map((p) => ({ ...p, tags: [...p.tags] })));
   const [skills, setSkills] = useState(initialSkills.map((s) => ({ ...s, items: [...s.items] })));
+
+  useEffect(() => {
+    // Check sessionStorage for existing session
+    const stored = sessionStorage.getItem("editor_user");
+    if (stored) {
+      setUser(JSON.parse(stored));
+      setAuthLoading(false);
+      return;
+    }
+
+    // Check for OAuth callback code in URL
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+
+    if (code) {
+      fetch(`${AUTH_WORKER_URL}/exchange`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code }),
+      })
+        .then((r) => (r.ok ? r.json() : Promise.reject("denied")))
+        .then((data) => {
+          sessionStorage.setItem("editor_user", JSON.stringify(data));
+          setUser(data);
+          window.history.replaceState({}, "", "/edit");
+        })
+        .catch(() => setUser(false))
+        .finally(() => setAuthLoading(false));
+    } else {
+      setAuthLoading(false);
+    }
+  }, []);
+
+  if (authLoading) {
+    return (
+      <div className="editor-page">
+        <div className="auth-gate">
+          <p>Authenticating...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (user === false) return <AccessDenied />;
+  if (!user) return <LoginPrompt />;
 
   return (
     <div className="editor-page">
@@ -23,6 +121,16 @@ function EditorPage() {
           <h1>Content Editor</h1>
         </div>
         <div className="editor-header-actions">
+          <span style={{ fontSize: 13, color: "var(--form-text-color)" }}>
+            {user.login}
+          </span>
+          {user.avatar_url && (
+            <img
+              src={user.avatar_url}
+              alt=""
+              style={{ width: 24, height: 24, borderRadius: "50%" }}
+            />
+          )}
           <ExportButton profile={profile} projects={projects} skills={skills} />
         </div>
       </div>
