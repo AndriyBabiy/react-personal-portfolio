@@ -19,7 +19,7 @@ function LoginPrompt() {
     const params = new URLSearchParams({
       client_id: GITHUB_CLIENT_ID,
       redirect_uri: REDIRECT_URI,
-      scope: "read:user",
+      scope: "read:user,repo",
     });
     window.location.href = `https://github.com/login/oauth/authorize?${params}`;
   };
@@ -70,6 +70,29 @@ function EditorPage() {
   const [skills, setSkills] = useState(initialSkills.map((s) => ({ ...s, items: [...s.items] })));
   const [desktopBackgrounds] = useState([...initialBackgrounds]);
   const [mediaFiles, setMediaFiles] = useState({ profileImage: null, cv: null, video: null, backgrounds: [] });
+  const [changes, setChanges] = useState(new Set());
+
+  // Track changes
+  const trackChange = (file) => setChanges((prev) => new Set([...prev, file]));
+  const handleProfileChange = (p) => { setProfile(p); trackChange("src/data/content.js"); };
+  const handleProjectsChange = (p) => { setProjects(p); trackChange("src/data/content.js"); };
+  const handleSkillsChange = (s) => { setSkills(s); trackChange("src/data/content.js"); };
+  const handleMediaChange = (m) => {
+    setMediaFiles(m);
+    if (m.cv) trackChange("public/cv.pdf");
+    if (m.video) trackChange("public/video.mp4");
+    if (m.profileImage) trackChange("public/profile.png");
+    if (m.backgrounds.length) trackChange("public/backgrounds");
+  };
+  const handleSaveComplete = () => setChanges(new Set());
+
+  // Warn before leaving with unsaved changes
+  useEffect(() => {
+    if (changes.size === 0) return;
+    const handler = (e) => { e.preventDefault(); };
+    window.addEventListener("beforeunload", handler);
+    return () => window.removeEventListener("beforeunload", handler);
+  }, [changes.size]);
 
   useEffect(() => {
     // Check sessionStorage for existing session
@@ -134,35 +157,41 @@ function EditorPage() {
               style={{ width: 24, height: 24, borderRadius: "50%" }}
             />
           )}
-          <ExportButton profile={profile} projects={projects} skills={skills} mediaFiles={mediaFiles} desktopBackgrounds={desktopBackgrounds} />
+          <ExportButton profile={profile} projects={projects} skills={skills} mediaFiles={mediaFiles} desktopBackgrounds={desktopBackgrounds} token={user.token} changes={changes} onSaveComplete={handleSaveComplete} />
         </div>
       </div>
 
       <div className="editor-body">
         <div className="editor-panel">
           <div className="editor-tabs">
-            {TABS.map((tab) => (
-              <button
-                key={tab}
-                className={`editor-tab ${activeTab === tab ? "active" : ""}`}
-                onClick={() => setActiveTab(tab)}
-              >
-                {tab}
-              </button>
-            ))}
+            {TABS.map((tab) => {
+              const hasChanges =
+                (tab === "Profile" || tab === "Projects" || tab === "Skills") && changes.has("src/data/content.js") ||
+                tab === "Media" && (changes.has("public/cv.pdf") || changes.has("public/video.mp4") || changes.has("public/profile.png") || changes.has("public/backgrounds"));
+              return (
+                <button
+                  key={tab}
+                  className={`editor-tab ${activeTab === tab ? "active" : ""}`}
+                  onClick={() => setActiveTab(tab)}
+                >
+                  {tab}
+                  {hasChanges && <span className="change-dot" />}
+                </button>
+              );
+            })}
           </div>
           <div className="editor-content">
             {activeTab === "Profile" && (
-              <ProfileEditor profile={profile} onChange={setProfile} />
+              <ProfileEditor profile={profile} onChange={handleProfileChange} />
             )}
             {activeTab === "Projects" && (
-              <ProjectsEditor projects={projects} onChange={setProjects} />
+              <ProjectsEditor projects={projects} onChange={handleProjectsChange} />
             )}
             {activeTab === "Skills" && (
-              <SkillsEditor skills={skills} onChange={setSkills} />
+              <SkillsEditor skills={skills} onChange={handleSkillsChange} />
             )}
             {activeTab === "Media" && (
-              <MediaEditor profile={profile} mediaFiles={mediaFiles} onMediaChange={setMediaFiles} />
+              <MediaEditor profile={profile} mediaFiles={mediaFiles} onMediaChange={handleMediaChange} />
             )}
           </div>
         </div>
@@ -228,6 +257,11 @@ function EditorPage() {
             </div>
           </div>
         </div>
+      </div>
+      <div className="editor-status-bar">
+        {changes.size > 0
+          ? `${changes.size} file${changes.size > 1 ? "s" : ""} modified`
+          : "No changes"}
       </div>
     </div>
   );
