@@ -213,9 +213,9 @@ const ExportButton = ({
   };
 
   const getSaveClassName = () => {
-    const base = "btn";
+    const base = "btn btn-save";
     if (saveStatus === "deployed") return `${base} btn-success`;
-    if (saveStatus === "error") return `${base} btn-danger`;
+    if (saveStatus === "error") return `${base} btn-error`;
     return `${base} btn-primary`;
   };
 
