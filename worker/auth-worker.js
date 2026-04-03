@@ -110,6 +110,14 @@ async function handleCommit(request, origin) {
     body: JSON.stringify({ base_tree: baseTreeSha, tree: treeEntries }),
   });
 
+  // 4b. Check if tree is identical (no actual changes)
+  if (tree.sha === baseTreeSha) {
+    return Response.json(
+      { noChanges: true, message: "Content is already up to date — no changes to deploy." },
+      { headers: corsHeaders(origin) }
+    );
+  }
+
   // 5. Create commit
   const commit = await ghFetch(`/repos/${REPO}/git/commits`, token, {
     method: "POST",

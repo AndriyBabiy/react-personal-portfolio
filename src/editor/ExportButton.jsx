@@ -139,6 +139,15 @@ const ExportButton = ({
         throw new Error(body || `HTTP ${res.status}`);
       }
 
+      const result = await res.json();
+
+      if (result.noChanges) {
+        setSaveStatus("nochanges");
+        setErrorMsg(result.message || "Content is already up to date.");
+        deployTimerRef.current = setTimeout(() => setSaveStatus("idle"), 4000);
+        return;
+      }
+
       setSaveStatus("deployed");
       if (onSaveComplete) onSaveComplete();
 
@@ -204,23 +213,24 @@ const ExportButton = ({
   const changeCount = changes ? changes.size : 0;
 
   const getSaveLabel = () => {
-    if (saveStatus === "saving") return "Saving...";
-    if (saveStatus === "deployed") return "Deployed!";
+    if (saveStatus === "saving") return "Committing to GitHub...";
+    if (saveStatus === "deployed") return "Committed! Deploying (~45s)...";
+    if (saveStatus === "nochanges") return "Already up to date";
     if (saveStatus === "error") return "Failed — Retry";
-    // idle
-    if (changeCount > 0) return `Save & Deploy (${changeCount})`;
+    if (changeCount > 0) return `Save & Deploy · ${changeCount} file${changeCount > 1 ? "s" : ""}`;
     return "Save & Deploy";
   };
 
   const getSaveClassName = () => {
     const base = "btn btn-save";
     if (saveStatus === "deployed") return `${base} btn-success`;
+    if (saveStatus === "nochanges") return `${base} btn-secondary`;
     if (saveStatus === "error") return `${base} btn-error`;
     return `${base} btn-primary`;
   };
 
   const isSaveDisabled =
-    (saveStatus === "idle" && changeCount === 0) || saveStatus === "saving" || saveStatus === "deployed";
+    (saveStatus === "idle" && changeCount === 0) || saveStatus === "saving" || saveStatus === "deployed" || saveStatus === "nochanges";
 
   return (
     <>
