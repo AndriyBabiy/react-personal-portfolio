@@ -98,7 +98,13 @@ function EditorPage() {
     // Check sessionStorage for existing session
     const stored = sessionStorage.getItem("editor_user");
     if (stored) {
-      setUser(JSON.parse(stored));
+      const parsed = JSON.parse(stored);
+      if (!parsed.token) {
+        sessionStorage.removeItem("editor_user");
+        setAuthLoading(false);
+        return;
+      }
+      setUser(parsed);
       setAuthLoading(false);
       return;
     }

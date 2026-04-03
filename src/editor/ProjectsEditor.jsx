@@ -1,10 +1,22 @@
+import { useState } from "react";
+
+const TagsInput = ({ tags, onChange }) => {
+  const [text, setText] = useState(tags.join(", "));
+
+  const handleChange = (value) => {
+    setText(value);
+    onChange(value.split(",").map((t) => t.trim()).filter(Boolean));
+  };
+
+  return (
+    <input value={text} onChange={(e) => handleChange(e.target.value)} />
+  );
+};
+
 const ProjectsEditor = ({ projects, onChange }) => {
   const updateProject = (index, field, value) => {
     const updated = projects.map((p, i) => {
       if (i !== index) return p;
-      if (field === "tags") {
-        return { ...p, tags: value.split(",").map((t) => t.trim()).filter(Boolean) };
-      }
       return { ...p, [field]: value };
     });
     onChange(updated);
@@ -54,7 +66,7 @@ const ProjectsEditor = ({ projects, onChange }) => {
           </div>
           <div className="field">
             <label>Tags (comma-separated)</label>
-            <input value={project.tags.join(", ")} onChange={(e) => updateProject(i, "tags", e.target.value)} />
+            <TagsInput key={`tags-${i}`} tags={project.tags} onChange={(tags) => updateProject(i, "tags", tags)} />
           </div>
           <div className="field">
             <label>Link</label>

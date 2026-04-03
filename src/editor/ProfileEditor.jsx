@@ -1,14 +1,20 @@
+import { useState } from "react";
+
 const ProfileEditor = ({ profile, onChange }) => {
+  const [rolesText, setRolesText] = useState(profile.roles.join(", "));
+
   const handleChange = (field, value) => {
     const updated = { ...profile, [field]: value };
     if (field === "firstName" || field === "lastName") {
       updated.name = `${field === "firstName" ? value : profile.firstName} ${field === "lastName" ? value : profile.lastName}`;
     }
-    if (field === "roles") {
-      const roles = value.split(",").map((r) => r.trim()).filter(Boolean);
-      updated.roles = roles;
-      updated.tagline = roles.join(" \u00b7 ");
-    }
+    onChange(updated);
+  };
+
+  const handleRolesChange = (text) => {
+    setRolesText(text);
+    const roles = text.split(",").map((r) => r.trim()).filter(Boolean);
+    const updated = { ...profile, roles, tagline: roles.join(" \u00b7 ") };
     onChange(updated);
   };
 
@@ -24,7 +30,7 @@ const ProfileEditor = ({ profile, onChange }) => {
       </div>
       <div className="field">
         <label>Roles (comma-separated)</label>
-        <input value={profile.roles.join(", ")} onChange={(e) => handleChange("roles", e.target.value)} />
+        <input value={rolesText} onChange={(e) => handleRolesChange(e.target.value)} />
       </div>
       <div className="field">
         <label>Short Bio</label>

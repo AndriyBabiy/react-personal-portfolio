@@ -1,10 +1,22 @@
+import { useState } from "react";
+
+const ItemsInput = ({ items, onChange }) => {
+  const [text, setText] = useState(items.join(", "));
+
+  const handleChange = (value) => {
+    setText(value);
+    onChange(value.split(",").map((t) => t.trim()).filter(Boolean));
+  };
+
+  return (
+    <input value={text} onChange={(e) => handleChange(e.target.value)} />
+  );
+};
+
 const SkillsEditor = ({ skills, onChange }) => {
   const updateCategory = (index, field, value) => {
     const updated = skills.map((s, i) => {
       if (i !== index) return s;
-      if (field === "items") {
-        return { ...s, items: value.split(",").map((t) => t.trim()).filter(Boolean) };
-      }
       return { ...s, [field]: value };
     });
     onChange(updated);
@@ -34,7 +46,7 @@ const SkillsEditor = ({ skills, onChange }) => {
           </div>
           <div className="field">
             <label>Skills (comma-separated)</label>
-            <input value={group.items.join(", ")} onChange={(e) => updateCategory(i, "items", e.target.value)} />
+            <ItemsInput key={`items-${i}`} items={group.items} onChange={(items) => updateCategory(i, "items", items)} />
           </div>
         </div>
       ))}
