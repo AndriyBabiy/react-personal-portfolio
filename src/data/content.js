@@ -51,6 +51,12 @@ export const projects = [
     }
   ];
 
+export const desktopBackgrounds = [
+    "/backgrounds/IMG_2659.AVIF",
+    "/backgrounds/IMG_2658.AVIF",
+    "/backgrounds/default.jpg"
+  ];
+
 export const skills = [
     {
       "category": "Languages",
@@ -97,10 +103,4 @@ export const skills = [
         "Agile"
       ]
     }
-  ];
-
-export const desktopBackgrounds = [
-    "/backgrounds/IMG_2659.AVIF",
-    "/backgrounds/IMG_2658.AVIF",
-    "/backgrounds/default.jpg"
   ];
