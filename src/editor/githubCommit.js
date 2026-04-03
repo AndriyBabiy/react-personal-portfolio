@@ -114,3 +114,37 @@ export function readFileAsBase64(file) {
  * Max file size for GitHub blob API (practical limit ~50MB)
  */
 export const MAX_BLOB_SIZE = 50 * 1024 * 1024;
+
+/**
+ * Fetch a file's content from the GitHub repo.
+ * Returns the decoded text content.
+ */
+export async function fetchRepoFile(token, path) {
+  const data = await ghFetch(`/repos/${REPO}/contents/${path}?ref=${BRANCH}`, token);
+  // GitHub returns base64-encoded content with newlines
+  return atob(data.content.replace(/\n/g, ""));
+}
+
+/**
+ * Parse the content.js text into structured data objects.
+ * Uses regex to extract the JSON objects from the ES module exports.
+ */
+export function parseContentJS(text) {
+  const extractExport = (name) => {
+    const regex = new RegExp(`export const ${name} = ([\\s\\S]*?);\\s*(?:export|$)`);
+    const match = text.match(regex);
+    if (!match) return null;
+    try {
+      return JSON.parse(match[1].trim());
+    } catch {
+      return null;
+    }
+  };
+
+  return {
+    profile: extractExport("profile"),
+    projects: extractExport("projects"),
+    skills: extractExport("skills"),
+    desktopBackgrounds: extractExport("desktopBackgrounds"),
+  };
+}

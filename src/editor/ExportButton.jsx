@@ -3,12 +3,8 @@ import JSZip from "jszip";
 import { commitFiles, readFileAsBase64, MAX_BLOB_SIZE } from "./githubCommit";
 
 const generateContentJS = (profile, projects, skills, { desktopBackgrounds }) => {
-  const indent = (obj) => {
-    return JSON.stringify(obj, null, 2)
-      .split("\n")
-      .map((line, i) => (i === 0 ? line : "  " + line))
-      .join("\n");
-  };
+  // Use 4-space indent to match repo format exactly (prevents formatting-only commits)
+  const fmt = (obj) => JSON.stringify(obj, null, 4).replace(/^/gm, "    ").replace(/^    /, "");
 
   const profileObj = {
     name: profile.name,
@@ -26,16 +22,15 @@ const generateContentJS = (profile, projects, skills, { desktopBackgrounds }) =>
     profileImage: profile.profileImage || "/profile.png",
   };
 
-  return [
-    `export const profile = ${indent(profileObj)};`,
-    "",
-    `export const projects = ${indent(projects)};`,
-    "",
-    `export const desktopBackgrounds = ${indent(desktopBackgrounds || [])};`,
-    "",
-    `export const skills = ${indent(skills)};`,
-    "",
-  ].join("\n");
+  // Order must match repo: profile → projects → desktopBackgrounds → skills
+  return `export const profile = ${fmt(profileObj)};
+
+export const projects = ${fmt(projects)};
+
+export const desktopBackgrounds = ${fmt(desktopBackgrounds || [])};
+
+export const skills = ${fmt(skills)};
+`;
 };
 
 const ExportButton = ({

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router";
-import { profile as initialProfile, projects as initialProjects, skills as initialSkills, desktopBackgrounds as initialBackgrounds } from "../data/content";
+import { profile as fallbackProfile, projects as fallbackProjects, skills as fallbackSkills, desktopBackgrounds as fallbackBackgrounds } from "../data/content";
+import { fetchRepoFile, parseContentJS } from "../editor/githubCommit";
 import ProfileEditor from "../editor/ProfileEditor";
 import ProjectsEditor from "../editor/ProjectsEditor";
 import SkillsEditor from "../editor/SkillsEditor";
@@ -9,8 +10,9 @@ import ExportButton from "../editor/ExportButton";
 import "../editor/ContentEditor.css";
 
 const GITHUB_CLIENT_ID = import.meta.env.VITE_GITHUB_CLIENT_ID || "";
-const AUTH_WORKER_URL = import.meta.env.VITE_AUTH_WORKER_URL || "https://auth.andriybabiy.com";
+const AUTH_WORKER_URL = import.meta.env.VITE_AUTH_WORKER_URL || "https://andriybabiy.com/api/auth";
 const REDIRECT_URI = `${window.location.origin}/edit`;
+const STORAGE_KEY = "editor_user";
 
 const TABS = ["Profile", "Projects", "Skills", "Media"];
 
@@ -64,11 +66,14 @@ function AccessDenied() {
 function EditorPage() {
   const [user, setUser] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
+  const [contentLoading, setContentLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("Profile");
-  const [profile, setProfile] = useState({ ...initialProfile, roles: [...initialProfile.roles] });
-  const [projects, setProjects] = useState(initialProjects.map((p) => ({ ...p, tags: [...p.tags] })));
-  const [skills, setSkills] = useState(initialSkills.map((s) => ({ ...s, items: [...s.items] })));
-  const [desktopBackgrounds] = useState([...initialBackgrounds]);
+
+  // Content state — initialized empty, loaded from GitHub API after auth
+  const [profile, setProfile] = useState(null);
+  const [projects, setProjects] = useState(null);
+  const [skills, setSkills] = useState(null);
+  const [desktopBackgrounds, setDesktopBackgrounds] = useState(null);
   const [mediaFiles, setMediaFiles] = useState({ profileImage: null, cv: null, video: null, backgrounds: [] });
   const [changes, setChanges] = useState(new Set());
 
@@ -86,6 +91,11 @@ function EditorPage() {
   };
   const handleSaveComplete = () => setChanges(new Set());
 
+  const handleSignOut = () => {
+    localStorage.removeItem(STORAGE_KEY);
+    setUser(null);
+  };
+
   // Warn before leaving with unsaved changes
   useEffect(() => {
     if (changes.size === 0) return;
@@ -94,13 +104,13 @@ function EditorPage() {
     return () => window.removeEventListener("beforeunload", handler);
   }, [changes.size]);
 
+  // Auth: use localStorage so token persists across page refreshes
   useEffect(() => {
-    // Check sessionStorage for existing session
-    const stored = sessionStorage.getItem("editor_user");
+    const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
       const parsed = JSON.parse(stored);
       if (!parsed.token) {
-        sessionStorage.removeItem("editor_user");
+        localStorage.removeItem(STORAGE_KEY);
         setAuthLoading(false);
         return;
       }
@@ -121,7 +131,7 @@ function EditorPage() {
       })
         .then((r) => (r.ok ? r.json() : Promise.reject("denied")))
         .then((data) => {
-          sessionStorage.setItem("editor_user", JSON.stringify(data));
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
           setUser(data);
           window.history.replaceState({}, "", "/edit");
         })
@@ -132,18 +142,47 @@ function EditorPage() {
     }
   }, []);
 
+  // Load content from GitHub API after auth (not from deployed build)
+  useEffect(() => {
+    if (!user || !user.token || profile !== null) return;
+
+    setContentLoading(true);
+    fetchRepoFile(user.token, "src/data/content.js")
+      .then((text) => {
+        const parsed = parseContentJS(text);
+        setProfile(parsed.profile || { ...fallbackProfile });
+        setProjects(parsed.projects || [...fallbackProjects]);
+        setSkills(parsed.skills || [...fallbackSkills]);
+        setDesktopBackgrounds(parsed.desktopBackgrounds || [...fallbackBackgrounds]);
+      })
+      .catch(() => {
+        // Fallback to static imports if GitHub API fails
+        setProfile({ ...fallbackProfile, roles: [...fallbackProfile.roles] });
+        setProjects(fallbackProjects.map((p) => ({ ...p, tags: [...p.tags] })));
+        setSkills(fallbackSkills.map((s) => ({ ...s, items: [...s.items] })));
+        setDesktopBackgrounds([...fallbackBackgrounds]);
+      })
+      .finally(() => setContentLoading(false));
+  }, [user]);
+
   if (authLoading) {
     return (
       <div className="editor-page">
-        <div className="auth-gate">
-          <p>Authenticating...</p>
-        </div>
+        <div className="auth-gate"><p>Authenticating...</p></div>
       </div>
     );
   }
 
   if (user === false) return <AccessDenied />;
   if (!user) return <LoginPrompt />;
+
+  if (contentLoading || !profile) {
+    return (
+      <div className="editor-page">
+        <div className="auth-gate"><p>Loading content from GitHub...</p></div>
+      </div>
+    );
+  }
 
   return (
     <div className="editor-page">
@@ -157,13 +196,21 @@ function EditorPage() {
             {user.login}
           </span>
           {user.avatar_url && (
-            <img
-              src={user.avatar_url}
-              alt=""
-              style={{ width: 24, height: 24, borderRadius: "50%" }}
-            />
+            <img src={user.avatar_url} alt="" style={{ width: 24, height: 24, borderRadius: "50%" }} />
           )}
-          <ExportButton profile={profile} projects={projects} skills={skills} mediaFiles={mediaFiles} desktopBackgrounds={desktopBackgrounds} token={user.token} changes={changes} onSaveComplete={handleSaveComplete} />
+          <ExportButton
+            profile={profile}
+            projects={projects}
+            skills={skills}
+            mediaFiles={mediaFiles}
+            desktopBackgrounds={desktopBackgrounds}
+            token={user.token}
+            changes={changes}
+            onSaveComplete={handleSaveComplete}
+          />
+          <button className="btn btn-secondary" onClick={handleSignOut} style={{ fontSize: 12 }}>
+            Sign out
+          </button>
         </div>
       </div>
 
@@ -187,18 +234,10 @@ function EditorPage() {
             })}
           </div>
           <div className="editor-content">
-            {activeTab === "Profile" && (
-              <ProfileEditor profile={profile} onChange={handleProfileChange} />
-            )}
-            {activeTab === "Projects" && (
-              <ProjectsEditor projects={projects} onChange={handleProjectsChange} />
-            )}
-            {activeTab === "Skills" && (
-              <SkillsEditor skills={skills} onChange={handleSkillsChange} />
-            )}
-            {activeTab === "Media" && (
-              <MediaEditor profile={profile} mediaFiles={mediaFiles} onMediaChange={handleMediaChange} />
-            )}
+            {activeTab === "Profile" && <ProfileEditor profile={profile} onChange={handleProfileChange} />}
+            {activeTab === "Projects" && <ProjectsEditor projects={projects} onChange={handleProjectsChange} />}
+            {activeTab === "Skills" && <SkillsEditor skills={skills} onChange={handleSkillsChange} />}
+            {activeTab === "Media" && <MediaEditor profile={profile} mediaFiles={mediaFiles} onMediaChange={handleMediaChange} />}
           </div>
         </div>
 
@@ -225,37 +264,12 @@ function EditorPage() {
                 Projects
               </h1>
               {projects.map((project, i) => (
-                <div
-                  key={i}
-                  style={{
-                    padding: 20,
-                    borderRadius: 12,
-                    border: "1px solid rgba(0,0,0,0.06)",
-                    marginBottom: 16,
-                  }}
-                >
-                  <h3 style={{ fontFamily: "'Roboto Mono', monospace", fontSize: 18, margin: "0 0 8px" }}>
-                    {project.title}
-                  </h3>
-                  <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: 16, fontWeight: 300, lineHeight: 1.5, margin: "0 0 12px" }}>
-                    {project.description}
-                  </p>
+                <div key={i} style={{ padding: 20, borderRadius: 12, border: "1px solid rgba(0,0,0,0.06)", marginBottom: 16 }}>
+                  <h3 style={{ fontFamily: "'Roboto Mono', monospace", fontSize: 18, margin: "0 0 8px" }}>{project.title}</h3>
+                  <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: 16, fontWeight: 300, lineHeight: 1.5, margin: "0 0 12px" }}>{project.description}</p>
                   <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                     {project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        style={{
-                          fontSize: 12,
-                          fontWeight: 500,
-                          padding: "3px 10px",
-                          borderRadius: 6,
-                          border: "1px solid var(--btn-color)",
-                          color: "var(--text-color)",
-                          opacity: 0.7,
-                        }}
-                      >
-                        {tag}
-                      </span>
+                      <span key={tag} style={{ fontSize: 12, fontWeight: 500, padding: "3px 10px", borderRadius: 6, border: "1px solid var(--btn-color)", color: "var(--text-color)", opacity: 0.7 }}>{tag}</span>
                     ))}
                   </div>
                 </div>
@@ -267,7 +281,7 @@ function EditorPage() {
       <div className="editor-status-bar">
         {changes.size > 0
           ? `${changes.size} file${changes.size > 1 ? "s" : ""} modified`
-          : "No changes"}
+          : "No changes · Content loaded from GitHub"}
       </div>
     </div>
   );
