@@ -7,7 +7,7 @@ export const profile = {
             "Growth Marketing",
             "Machine Learning"
         ],
-        "tagline": "Software Development ÃÂ· Growth Marketing ÃÂ· Machine Learning",
+        "tagline": "Software Development ÃÂÃÂ· Growth Marketing ÃÂÃÂ· Machine Learning",
         "bio": "Passion for developing digital products and experiences that leave a lasting impact.",
         "extendedBio": "Passionate about developing digital products and experiences that leave a lasting impact. I bring a unique blend of technical engineering skills and growth marketing expertise to every project I work on.",
         "email": "me@andriybabiy.com",
