@@ -1,12 +1,12 @@
 import './ContactApp.css';
-import { profile } from '../../data/content';
+import { profile, desktopConfig } from '../../data/content';
 
 const ContactApp = () => {
   return (
     <div className="contact-app">
       <div className="contact-header">
-        <h2>Get in Touch</h2>
-        <p>Feel free to reach out through any of these channels</p>
+        <h2>{desktopConfig?.contactApp?.heading || "Get in Touch"}</h2>
+        <p>{desktopConfig?.contactApp?.subheading || "Feel free to reach out through any of these channels"}</p>
       </div>
 
       <div className="contact-cards">

@@ -1,5 +1,5 @@
 import './AboutApp.css';
-import { profile, skills } from '../../data/content';
+import { profile, skills, desktopConfig } from '../../data/content';
 
 const AboutApp = () => {
   return (
@@ -10,12 +10,12 @@ const AboutApp = () => {
       </div>
 
       <div className="about-section">
-        <h3>About</h3>
+        <h3>{desktopConfig?.aboutApp?.aboutHeading || "About"}</h3>
         <p>{profile.extendedBio}</p>
       </div>
 
       <div className="about-section">
-        <h3>Skills</h3>
+        <h3>{desktopConfig?.aboutApp?.skillsHeading || "Skills"}</h3>
         <div className="skills-grid">
           {skills.map((group) => (
             <div key={group.category} className="skill-group">
@@ -31,7 +31,7 @@ const AboutApp = () => {
       </div>
 
       <div className="about-section">
-        <h3>Links</h3>
+        <h3>{desktopConfig?.aboutApp?.linksHeading || "Links"}</h3>
         <div className="about-links">
           <a href={profile.github} target="_blank" rel="noopener noreferrer" className="about-link">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">

@@ -8,7 +8,7 @@ const AppleLogo = () => (
   </svg>
 );
 
-const TopBar = ({ onBackgroundChange }) => {
+const TopBar = ({ onBackgroundChange, desktopConfig }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
@@ -40,11 +40,10 @@ const TopBar = ({ onBackgroundChange }) => {
         <Link to="/" className="apple-logo" aria-label="Back to portfolio">
           <AppleLogo />
         </Link>
-        <span className="menu-item active">Portfolio OS</span>
-        <span className="menu-item">File</span>
-        <span className="menu-item">Edit</span>
-        <span className="menu-item">View</span>
-        <span className="menu-item">Help</span>
+        <span className="menu-item active">{desktopConfig?.topBar?.title || "Portfolio OS"}</span>
+        {(desktopConfig?.topBar?.menuItems || ["File", "Edit", "View", "Help"]).map((item) => (
+          <span key={item} className="menu-item">{item}</span>
+        ))}
       </div>
       <div className="top-bar-right">
         <button

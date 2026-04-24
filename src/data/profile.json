@@ -1,0 +1,21 @@
+{
+  "profile": {
+    "name": "Andriy Babiy",
+    "firstName": "Andriy",
+    "lastName": "Babiy",
+    "roles": [
+      "Software Development",
+      "Growth",
+      "Machine Learning"
+    ],
+    "tagline": "Software Development · Growth · Machine Learning",
+    "bio": "Passion for developing digital products and experiences that leave a lasting impact.",
+    "extendedBio": "Passionate about developing digital products and experiences that leave a lasting impact. I bring a unique blend of technical engineering skills and growth marketing expertise to every project I work on.",
+    "email": "me@andriybabiy.com",
+    "github": "https://github.com/AndriyBabiy",
+    "linkedin": "https://www.linkedin.com/in/andriy-babiy/",
+    "cvPath": "/uploads/cv.pdf",
+    "videoPath": "/uploads/video.mp4",
+    "profileImage": "/uploads/profile.png"
+  }
+}

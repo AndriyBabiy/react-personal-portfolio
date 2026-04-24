@@ -51,51 +51,20 @@ const DockIcon = ({ icon, color }) => {
   );
 };
 
-const Sidebar = ({ onAppClick, openWindowIds = [] }) => {
-  const apps = [
-    {
-      id: 'cv',
-      name: 'CV',
-      icon: 'cv',
-      color: 'linear-gradient(135deg, #007AFF, #0051D5)',
-      functional: true,
-    },
-    {
-      id: 'video',
-      name: 'Video',
-      icon: 'video',
-      color: 'linear-gradient(135deg, #FF3B30, #D42A20)',
-      functional: true,
-    },
-    {
-      id: 'projects',
-      name: 'Projects',
-      icon: 'projects',
-      color: 'linear-gradient(135deg, #34C759, #248A3D)',
-      functional: true,
-    },
-    {
-      id: 'about',
-      name: 'About',
-      icon: 'about',
-      color: 'linear-gradient(135deg, #5856D6, #3634A3)',
-      functional: true,
-    },
-    {
-      id: 'contact',
-      name: 'Contact',
-      icon: 'contact',
-      color: 'linear-gradient(135deg, #FF9500, #C77700)',
-      functional: true,
-    },
-    {
-      id: 'studyie',
-      name: 'Study.ie',
-      icon: 'studyie',
-      color: 'linear-gradient(135deg, #AF52DE, #8944AB)',
-      functional: true,
-    },
-  ];
+const DEFAULT_DOCK = [
+  { id: 'cv', name: 'CV', color: 'linear-gradient(135deg, #007AFF, #0051D5)' },
+  { id: 'video', name: 'Video', color: 'linear-gradient(135deg, #FF3B30, #D42A20)' },
+  { id: 'projects', name: 'Projects', color: 'linear-gradient(135deg, #34C759, #248A3D)' },
+  { id: 'about', name: 'About', color: 'linear-gradient(135deg, #5856D6, #3634A3)' },
+  { id: 'contact', name: 'Contact', color: 'linear-gradient(135deg, #FF9500, #C77700)' },
+  { id: 'studyie', name: 'Study.ie', color: 'linear-gradient(135deg, #AF52DE, #8944AB)', externalUrl: 'https://study.ie' },
+];
+
+const Sidebar = ({ onAppClick, openWindowIds = [], desktopConfig }) => {
+  const apps = (desktopConfig?.dock || DEFAULT_DOCK).map((app) => ({
+    ...app,
+    icon: app.id,
+  }));
 
   return (
     <div className="dock-container">

@@ -7,10 +7,10 @@ import VideoPlayer from "./components/VideoPlayer";
 import ProjectsApp from "./components/ProjectsApp";
 import AboutApp from "./components/AboutApp";
 import ContactApp from "./components/ContactApp";
-import { desktopBackgrounds } from "../data/content";
+import { desktopBackgrounds, desktopConfig } from "../data/content";
 import "./Desktop.css";
 
-const WINDOW_SIZES = {
+const DEFAULT_WINDOW_SIZES = {
   cv: { width: 700, height: 500 },
   video: { width: 720, height: 460 },
   projects: { width: 520, height: 480 },
@@ -18,11 +18,18 @@ const WINDOW_SIZES = {
   contact: { width: 440, height: 400 },
 };
 
+const DEFAULT_GRADIENTS = [
+  "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
+  "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+  "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
+  "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)",
+];
+
 function Desktop() {
   const [openWindows, setOpenWindows] = useState([]);
   const [activeWindowId, setActiveWindowId] = useState(null);
   const [backgroundImage, setBackgroundImage] = useState(
-    "/backgrounds/IMG_2659.AVIF"
+    "/uploads/backgrounds/IMG_2659.AVIF"
   );
 
   useEffect(() => {
@@ -35,23 +42,19 @@ function Desktop() {
     }
   }, [backgroundImage]);
 
+  const windowSizes = desktopConfig?.windowSizes || DEFAULT_WINDOW_SIZES;
+
   const changeBackground = () => {
-    const backgrounds = [
-      ...desktopBackgrounds,
-      "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
-      "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-      "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
-      "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)",
-    ];
+    const gradients = desktopConfig?.gradients || DEFAULT_GRADIENTS;
+    const backgrounds = [...desktopBackgrounds, ...gradients];
     const currentIndex = backgrounds.indexOf(backgroundImage);
     const nextIndex = (currentIndex + 1) % backgrounds.length;
     setBackgroundImage(backgrounds[nextIndex]);
   };
 
   const handleAppClick = (app) => {
-    // Study.ie opens in a new tab — not a window
-    if (app.id === "studyie") {
-      window.open("https://study.ie", "_blank", "noopener,noreferrer");
+    if (app.externalUrl) {
+      window.open(app.externalUrl, "_blank", "noopener,noreferrer");
       return;
     }
 
@@ -62,7 +65,7 @@ function Desktop() {
       return;
     }
 
-    const size = WINDOW_SIZES[app.id] || { width: 600, height: 400 };
+    const size = windowSizes[app.id] || { width: 600, height: 400 };
     const offset = openWindows.length * 30;
     const newWindow = {
       id: app.id,
@@ -115,7 +118,7 @@ function Desktop() {
           : backgroundImage,
       }}
     >
-      <TopBar onBackgroundChange={changeBackground} />
+      <TopBar onBackgroundChange={changeBackground} desktopConfig={desktopConfig} />
       <div className="desktop">
         {openWindows.map((win) => (
           <Window
@@ -131,7 +134,7 @@ function Desktop() {
           </Window>
         ))}
       </div>
-      <Sidebar onAppClick={handleAppClick} openWindowIds={openWindows.map(w => w.id)} />
+      <Sidebar onAppClick={handleAppClick} openWindowIds={openWindows.map(w => w.id)} desktopConfig={desktopConfig} />
     </div>
   );
 }
