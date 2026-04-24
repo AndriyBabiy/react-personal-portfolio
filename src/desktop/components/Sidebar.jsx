@@ -42,47 +42,91 @@ const DockIcon = ({ icon, color }) => {
         <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
       </svg>
     ),
+    launchpad: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <rect x="3" y="3" width="5" height="5" rx="1.2" fill="#FF3B30" />
+        <rect x="9.5" y="3" width="5" height="5" rx="1.2" fill="#FF9500" />
+        <rect x="16" y="3" width="5" height="5" rx="1.2" fill="#FFCC00" />
+        <rect x="3" y="9.5" width="5" height="5" rx="1.2" fill="#34C759" />
+        <rect x="9.5" y="9.5" width="5" height="5" rx="1.2" fill="#5AC8FA" />
+        <rect x="16" y="9.5" width="5" height="5" rx="1.2" fill="#007AFF" />
+        <rect x="3" y="16" width="5" height="5" rx="1.2" fill="#5856D6" />
+        <rect x="9.5" y="16" width="5" height="5" rx="1.2" fill="#AF52DE" />
+        <rect x="16" y="16" width="5" height="5" rx="1.2" fill="#FF2D55" />
+      </svg>
+    ),
+    trash: (
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path className="trash-lid" d="M3 6h18" />
+        <path className="trash-lid" d="M9 4h6a1 1 0 0 1 1 1v1H8V5a1 1 0 0 1 1-1z" />
+        <path d="M5.5 6.5l1 13a2 2 0 0 0 2 1.8h7a2 2 0 0 0 2-1.8l1-13" />
+        <line x1="10" y1="11" x2="10" y2="17" />
+        <line x1="14" y1="11" x2="14" y2="17" />
+      </svg>
+    ),
   };
 
   return (
-    <div className="dock-icon-bg" style={{ background: color }}>
-      {icons[icon]}
+    <div className={`dock-icon-bg dock-icon-${icon}`} style={{ background: color }}>
+      {icons[icon] || icons.projects}
     </div>
   );
 };
 
 const DEFAULT_DOCK = [
+  { id: 'launchpad', name: 'Launchpad', color: 'linear-gradient(135deg, #3a3a3c, #1c1c1e)', action: 'launchpad' },
   { id: 'cv', name: 'CV', color: 'linear-gradient(135deg, #007AFF, #0051D5)' },
   { id: 'video', name: 'Video', color: 'linear-gradient(135deg, #FF3B30, #D42A20)' },
   { id: 'projects', name: 'Projects', color: 'linear-gradient(135deg, #34C759, #248A3D)' },
   { id: 'about', name: 'About', color: 'linear-gradient(135deg, #5856D6, #3634A3)' },
   { id: 'contact', name: 'Contact', color: 'linear-gradient(135deg, #FF9500, #C77700)' },
-  { id: 'studyie', name: 'Study.ie', color: 'linear-gradient(135deg, #AF52DE, #8944AB)', externalUrl: 'https://study.ie' },
+  { id: 'trash', name: 'Trash', color: 'linear-gradient(135deg, #8e8e93, #48484a)', divider: true },
 ];
 
-const Sidebar = ({ onAppClick, openWindowIds = [], desktopConfig }) => {
+const Sidebar = ({ onAppClick, onLaunchpadOpen, openWindowIds = [], minimizedWindowIds = [], desktopConfig }) => {
   const apps = (desktopConfig?.dock || DEFAULT_DOCK).map((app) => ({
     ...app,
     icon: app.id,
   }));
 
+  const handleClick = (app) => {
+    if (app.action === 'launchpad') {
+      onLaunchpadOpen?.();
+      return;
+    }
+    if (app.target) {
+      onAppClick({ id: app.target, name: app.name });
+      return;
+    }
+    onAppClick(app);
+  };
+
   return (
     <div className="dock-container">
       <div className="dock">
-        {apps.map((app) => (
-          <button
-            key={app.id}
-            className="dock-item"
-            onClick={() => onAppClick(app)}
-            aria-label={`Open ${app.name}`}
-          >
-            <DockIcon icon={app.icon} color={app.color} />
-            <span className="dock-label">{app.name}</span>
-            {openWindowIds.includes(app.id) && (
-              <span className="dock-active-dot" />
-            )}
-          </button>
-        ))}
+        {apps.flatMap((app) => {
+          const button = (
+            <button
+              key={app.id}
+              className={`dock-item ${app.id === 'trash' ? 'dock-item-trash' : ''}`}
+              onClick={() => handleClick(app)}
+              aria-label={`Open ${app.name}`}
+            >
+              <DockIcon icon={app.icon} color={app.color} />
+              <span className="dock-label">{app.name}</span>
+              {openWindowIds.includes(app.target || app.id) && app.action !== 'launchpad' && (
+                <span className={`dock-active-dot ${minimizedWindowIds.includes(app.target || app.id) ? 'minimized' : ''}`} />
+              )}
+            </button>
+          );
+          if (app.divider) {
+            return [
+              <div key={`${app.id}-divider`} className="dock-divider" aria-hidden="true" />,
+              button,
+            ];
+          }
+          return [button];
+        })}
       </div>
     </div>
   );

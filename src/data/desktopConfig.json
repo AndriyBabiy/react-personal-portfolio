@@ -11,6 +11,12 @@
     },
     "dock": [
       {
+        "id": "launchpad",
+        "name": "Launchpad",
+        "color": "linear-gradient(135deg, #3a3a3c, #1c1c1e)",
+        "action": "launchpad"
+      },
+      {
         "id": "cv",
         "name": "CV",
         "color": "linear-gradient(135deg, #007AFF, #0051D5)"
@@ -36,10 +42,10 @@
         "color": "linear-gradient(135deg, #FF9500, #C77700)"
       },
       {
-        "id": "studyie",
-        "name": "Study.ie",
-        "color": "linear-gradient(135deg, #AF52DE, #8944AB)",
-        "externalUrl": "https://study.ie"
+        "id": "trash",
+        "name": "Trash",
+        "color": "linear-gradient(135deg, #8e8e93, #48484a)",
+        "divider": true
       }
     ],
     "windowSizes": {
@@ -47,7 +53,8 @@
       "video": { "width": 720, "height": 460 },
       "projects": { "width": 520, "height": 480 },
       "about": { "width": 480, "height": 560 },
-      "contact": { "width": 440, "height": 400 }
+      "contact": { "width": 440, "height": 400 },
+      "trash": { "width": 520, "height": 380 }
     },
     "aboutApp": {
       "aboutHeading": "About",
@@ -67,6 +74,14 @@
       "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
       "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
       "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)"
+    ],
+    "desktopIcons": [
+      {
+        "id": "studyie",
+        "name": "Study.ie",
+        "iconPath": "/uploads/apps/studyie.svg",
+        "externalUrl": "https://study.ie"
+      }
     ]
   }
 }
