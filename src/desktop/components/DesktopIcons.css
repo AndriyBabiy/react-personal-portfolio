@@ -1,0 +1,92 @@
+.desktop-icons-layer {
+  position: absolute;
+  inset: 28px 0 80px 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.desktop-icon {
+  position: absolute;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 88px;
+  padding: 6px 4px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.desktop-icon:hover {
+  transform: translateY(-4px) scale(1.08);
+}
+
+.desktop-icon:active {
+  transform: translateY(-1px) scale(1.02);
+}
+
+.desktop-icon.dragging {
+  cursor: grabbing;
+  transform: scale(1.1);
+  opacity: 0.85;
+  transition: none;
+  z-index: 100;
+}
+
+.desktop-icon:focus {
+  outline: none;
+}
+
+.desktop-icon:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.6);
+  outline-offset: 2px;
+}
+
+.desktop-icon-image {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
+  transition: filter 0.2s ease;
+  pointer-events: none;
+}
+
+.desktop-icon:hover .desktop-icon-image {
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.45));
+}
+
+.desktop-icon-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 14px;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.desktop-icon-label {
+  font-size: 12px;
+  line-height: 1.2;
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+  max-width: 84px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .desktop-icon {
+    transition: none;
+  }
+}

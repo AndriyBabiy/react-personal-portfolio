@@ -1,0 +1,18 @@
+{
+  "siteConfig": {
+    "seo": {
+      "title": "Andriy Babiy",
+      "description": "Andriy Babiy — Software Developer, Growth Marketer, and Machine Learning practitioner. View my portfolio and projects."
+    },
+    "hero": {
+      "resumeButtonText": "Resume",
+      "desktopLinkText": "Try the Desktop Experience →"
+    },
+    "projects": {
+      "sectionTitle": "Projects"
+    },
+    "footer": {
+      "text": "© {year} Andriy Babiy"
+    }
+  }
+}

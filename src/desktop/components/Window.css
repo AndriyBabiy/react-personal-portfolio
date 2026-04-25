@@ -150,11 +150,99 @@
 
 .resize-handle {
   position: absolute;
+  z-index: 10;
+}
+
+.resize-n {
+  top: -3px;
+  left: 12px;
+  right: 12px;
+  height: 6px;
+  cursor: ns-resize;
+}
+
+.resize-s {
+  bottom: -3px;
+  left: 12px;
+  right: 12px;
+  height: 6px;
+  cursor: ns-resize;
+}
+
+.resize-e {
+  top: 12px;
+  bottom: 12px;
+  right: -3px;
+  width: 6px;
+  cursor: ew-resize;
+}
+
+.resize-w {
+  top: 12px;
+  bottom: 12px;
+  left: -3px;
+  width: 6px;
+  cursor: ew-resize;
+}
+
+.resize-ne {
+  top: -4px;
+  right: -4px;
+  width: 14px;
+  height: 14px;
+  cursor: nesw-resize;
+}
+
+.resize-nw {
+  top: -4px;
+  left: -4px;
+  width: 14px;
+  height: 14px;
+  cursor: nwse-resize;
+}
+
+.resize-se {
   bottom: 0;
   right: 0;
-  width: 16px;
-  height: 16px;
-  cursor: se-resize;
+  width: 18px;
+  height: 18px;
+  cursor: nwse-resize;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 2px;
+  color: rgba(0, 0, 0, 0.32);
+  pointer-events: auto;
+}
+
+.resize-sw {
+  bottom: 0;
+  left: 0;
+  width: 18px;
+  height: 18px;
+  cursor: nesw-resize;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 2px;
+  color: rgba(0, 0, 0, 0.32);
+  transform: scaleX(-1);
+}
+
+.resize-grip {
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  pointer-events: none;
+}
+
+.window:hover .resize-grip,
+.window.active .resize-grip {
+  opacity: 0.55;
+}
+
+.resize-se:hover .resize-grip,
+.resize-sw:hover .resize-grip {
+  opacity: 0.9;
 }
 
 @media (prefers-reduced-motion: reduce) {

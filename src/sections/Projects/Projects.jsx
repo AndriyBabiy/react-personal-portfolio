@@ -1,13 +1,13 @@
 import styles from "./ProjectsStyles.module.css";
 import { useTheme } from "../../common/ThemeContext";
-import { projects } from "../../data/content";
+import { projects, siteConfig } from "../../data/content";
 
 const Projects = () => {
   const { theme } = useTheme();
 
   return (
     <section id="projects" className={styles.container}>
-      <h1 className={styles.sectionTitle}>Projects</h1>
+      <h1 className={styles.sectionTitle}>{siteConfig?.projects?.sectionTitle || "Projects"}</h1>
       <div className={styles.grid}>
         {projects.map((project) => (
           <a

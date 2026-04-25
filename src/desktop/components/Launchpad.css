@@ -1,0 +1,118 @@
+.launchpad-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9500;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: saturate(180%) blur(30px);
+  -webkit-backdrop-filter: saturate(180%) blur(30px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 72px 32px 120px;
+  animation: launchpadFade 0.25s ease both;
+}
+
+@keyframes launchpadFade {
+  from {
+    opacity: 0;
+    backdrop-filter: saturate(100%) blur(0);
+    -webkit-backdrop-filter: saturate(100%) blur(0);
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.launchpad-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 120px);
+  gap: 28px 36px;
+  max-width: 900px;
+  width: 100%;
+  justify-content: center;
+  animation: launchpadScale 0.28s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+}
+
+@keyframes launchpadScale {
+  from {
+    opacity: 0;
+    transform: scale(1.08);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.launchpad-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.launchpad-tile:hover {
+  transform: scale(1.06);
+}
+
+.launchpad-tile:active {
+  transform: scale(0.96);
+}
+
+.launchpad-tile:focus {
+  outline: none;
+}
+
+.launchpad-tile:focus-visible .launchpad-icon {
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.3),
+    0 0 0 3px rgba(255, 255, 255, 0.6);
+}
+
+.launchpad-icon {
+  width: 88px;
+  height: 88px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 4px 14px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transition: box-shadow 0.2s ease;
+  overflow: hidden;
+}
+
+.launchpad-tile:hover .launchpad-icon {
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.launchpad-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  text-align: center;
+  max-width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .launchpad-backdrop,
+  .launchpad-grid,
+  .launchpad-tile {
+    animation: none;
+    transition: none;
+  }
+}

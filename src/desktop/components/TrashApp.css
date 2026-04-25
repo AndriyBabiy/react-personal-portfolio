@@ -1,0 +1,173 @@
+.trash-app {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.trash-toolbar {
+  padding: 8px 14px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  background: rgba(247, 247, 247, 0.6);
+}
+
+.trash-path {
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.trash-count {
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.trash-grid {
+  flex: 1;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 96px);
+  gap: 20px;
+  align-content: start;
+  background: rgba(252, 252, 252, 0.4);
+  overflow: auto;
+}
+
+.trash-file {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  padding: 6px 4px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.15s ease;
+}
+
+.trash-file:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.trash-file.selected {
+  background: rgba(0, 122, 255, 0.16);
+}
+
+.trash-file:focus {
+  outline: none;
+}
+
+.trash-file:focus-visible {
+  outline: 2px solid rgba(0, 122, 255, 0.7);
+  outline-offset: 1px;
+}
+
+.trash-file-label {
+  font-size: 11px;
+  line-height: 1.25;
+  color: rgba(0, 0, 0, 0.85);
+  text-align: center;
+  max-width: 88px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.trash-file.selected .trash-file-label {
+  background: #0a84ff;
+  color: #fff;
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.text-note-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  animation: noteFade 0.18s ease both;
+}
+
+@keyframes noteFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.text-note {
+  width: min(90%, 420px);
+  max-height: 80%;
+  background: #fef9c3;
+  border-radius: 6px;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: noteScale 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes noteScale {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.text-note-header {
+  padding: 6px 10px;
+  background: linear-gradient(180deg, #fde68a, #fcd34d);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.text-note-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.text-note-close {
+  background: none;
+  border: none;
+  font-size: 16px;
+  line-height: 1;
+  padding: 2px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.65);
+  transition: background-color 0.15s ease;
+}
+
+.text-note-close:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.text-note-body {
+  margin: 0;
+  padding: 14px 18px;
+  font-family: "Menlo", "Monaco", "Courier New", monospace;
+  font-size: 13px;
+  line-height: 1.55;
+  color: rgba(0, 0, 0, 0.85);
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow: auto;
+  background: #fef9c3;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .text-note-backdrop,
+  .text-note {
+    animation: none;
+  }
+}

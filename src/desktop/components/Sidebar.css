@@ -97,6 +97,36 @@
   transition: opacity 0.2s ease;
 }
 
+.dock-active-dot.minimized {
+  background: rgba(255, 200, 0, 0.9);
+  box-shadow: 0 0 4px rgba(255, 200, 0, 0.6);
+}
+
+.dock-divider {
+  width: 1px;
+  align-self: stretch;
+  margin: 6px 4px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 1px;
+}
+
+.dock-icon-launchpad {
+  background: linear-gradient(135deg, rgba(60, 60, 62, 0.95), rgba(28, 28, 30, 0.95)) !important;
+}
+
+.dock-item-trash .trash-lid {
+  transform-origin: 3px 6px;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.dock-item-trash:hover .trash-lid {
+  transform: rotate(-14deg) translate(-0.5px, -1px);
+}
+
+.dock-item-trash:active .trash-lid {
+  transform: rotate(-22deg) translate(-1px, -1.5px);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .dock-container {
     animation: none;

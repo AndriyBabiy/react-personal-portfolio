@@ -1,0 +1,199 @@
+backend:
+  name: github
+  repo: AndriyBabiy/react-personal-portfolio
+  branch: main
+  base_url: https://andriybabiy.com
+  auth_endpoint: /api/auth/auth
+  commit_messages:
+    create: 'content: create {{collection}} "{{slug}}"'
+    update: 'content: update {{collection}} "{{slug}}"'
+    delete: 'content: delete {{collection}} "{{slug}}"'
+    uploadMedia: 'content: upload {{path}}'
+    deleteMedia: 'content: delete {{path}}'
+
+# Scoped media paths to avoid public/ root sprawl
+media_folder: public/uploads
+public_folder: /uploads
+
+collections:
+  - name: content
+    label: Site Content
+    files:
+      - label: Profile
+        name: profile
+        file: src/data/profile.json
+        format: json
+        fields:
+          - name: profile
+            label: Profile
+            widget: object
+            fields:
+              - { name: firstName, label: First Name, widget: string }
+              - { name: lastName, label: Last Name, widget: string }
+              - { name: name, label: Full Name, widget: string }
+              - name: roles
+                label: Roles
+                widget: list
+                field: { name: role, label: Role, widget: string }
+              - { name: tagline, label: Tagline, widget: string }
+              - { name: bio, label: Short Bio, widget: text }
+              - { name: extendedBio, label: Extended Bio, widget: text }
+              - { name: email, label: Email, widget: string }
+              - { name: github, label: GitHub URL, widget: string }
+              - { name: linkedin, label: LinkedIn URL, widget: string }
+              - { name: cvPath, label: CV Path, widget: string }
+              - { name: videoPath, label: Video Path, widget: string }
+              - { name: profileImage, label: Profile Image, widget: image }
+
+      - label: Projects
+        name: projects
+        file: src/data/projects.json
+        format: json
+        fields:
+          - name: projects
+            label: Projects
+            widget: list
+            fields:
+              - { name: title, label: Title, widget: string }
+              - { name: description, label: Description, widget: text }
+              - name: tags
+                label: Tags
+                widget: list
+                field: { name: tag, label: Tag, widget: string }
+              - { name: link, label: Link, widget: string }
+
+      - label: Skills
+        name: skills
+        file: src/data/skills.json
+        format: json
+        fields:
+          - name: skills
+            label: Skill Categories
+            widget: list
+            fields:
+              - { name: category, label: Category, widget: string }
+              - name: items
+                label: Items
+                widget: list
+                field: { name: item, label: Item, widget: string }
+
+      - label: Site Settings
+        name: siteConfig
+        file: src/data/siteConfig.json
+        format: json
+        fields:
+          - name: siteConfig
+            label: Site Configuration
+            widget: object
+            fields:
+              - name: seo
+                label: SEO
+                widget: object
+                fields:
+                  - { name: title, label: Page Title, widget: string }
+                  - { name: description, label: Meta Description, widget: text }
+              - name: hero
+                label: Hero Section
+                widget: object
+                fields:
+                  - { name: resumeButtonText, label: Resume Button Text, widget: string }
+                  - { name: desktopLinkText, label: Desktop Link Text, widget: string }
+              - name: projects
+                label: Projects Section
+                widget: object
+                fields:
+                  - { name: sectionTitle, label: Section Title, widget: string }
+              - name: footer
+                label: Footer
+                widget: object
+                fields:
+                  - { name: text, label: "Footer Text (supports {year})", widget: string }
+
+      - label: Desktop Experience
+        name: desktopConfig
+        file: src/data/desktopConfig.json
+        format: json
+        fields:
+          - name: desktopConfig
+            label: Desktop Configuration
+            widget: object
+            fields:
+              - name: topBar
+                label: Top Bar
+                widget: object
+                fields:
+                  - { name: title, label: Title, widget: string }
+                  - name: menuItems
+                    label: Menu Items
+                    widget: list
+                    field: { name: item, label: Menu Item, widget: string }
+              - name: dock
+                label: Dock Apps
+                widget: list
+                fields:
+                  - { name: id, label: ID, widget: string, hint: "Must match a known icon id (cv, video, projects, about, contact, studyie)" }
+                  - { name: name, label: Name, widget: string }
+                  - { name: color, label: Color (CSS gradient), widget: string }
+                  - { name: externalUrl, label: External URL (optional), widget: string, required: false }
+              - name: windowSizes
+                label: Window Sizes
+                widget: object
+                fields:
+                  - name: cv
+                    widget: object
+                    fields:
+                      - { name: width, widget: number, value_type: int }
+                      - { name: height, widget: number, value_type: int }
+                  - name: video
+                    widget: object
+                    fields:
+                      - { name: width, widget: number, value_type: int }
+                      - { name: height, widget: number, value_type: int }
+                  - name: projects
+                    widget: object
+                    fields:
+                      - { name: width, widget: number, value_type: int }
+                      - { name: height, widget: number, value_type: int }
+                  - name: about
+                    widget: object
+                    fields:
+                      - { name: width, widget: number, value_type: int }
+                      - { name: height, widget: number, value_type: int }
+                  - name: contact
+                    widget: object
+                    fields:
+                      - { name: width, widget: number, value_type: int }
+                      - { name: height, widget: number, value_type: int }
+              - name: aboutApp
+                label: About App
+                widget: object
+                fields:
+                  - { name: aboutHeading, label: About Heading, widget: string }
+                  - { name: skillsHeading, label: Skills Heading, widget: string }
+                  - { name: linksHeading, label: Links Heading, widget: string }
+              - name: contactApp
+                label: Contact App
+                widget: object
+                fields:
+                  - { name: heading, label: Heading, widget: string }
+                  - { name: subheading, label: Subheading, widget: string }
+              - name: projectsApp
+                label: Projects App
+                widget: object
+                fields:
+                  - { name: heading, label: Heading, widget: string }
+                  - { name: subheading, label: Subheading, widget: string }
+              - name: gradients
+                label: Background Gradients
+                widget: list
+                field: { name: gradient, label: CSS Gradient, widget: string }
+
+      - label: Desktop Backgrounds
+        name: desktopBackgrounds
+        file: src/data/desktopBackgrounds.json
+        format: json
+        fields:
+          - name: desktopBackgrounds
+            label: Background Images
+            widget: list
+            field: { name: path, label: Image Path, widget: image }

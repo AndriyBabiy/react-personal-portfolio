@@ -1,5 +1,5 @@
 import './ProjectsApp.css';
-import { projects } from '../../data/content';
+import { projects, desktopConfig } from '../../data/content';
 
 const ExternalLinkIcon = () => (
   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -13,8 +13,8 @@ const ProjectsApp = () => {
   return (
     <div className="projects-app">
       <div className="projects-header">
-        <h2>Projects</h2>
-        <p>A selection of things I&apos;ve built</p>
+        <h2>{desktopConfig?.projectsApp?.heading || "Projects"}</h2>
+        <p>{desktopConfig?.projectsApp?.subheading || "A selection of things I've built"}</p>
       </div>
       <div className="projects-grid">
         {projects.map((project) => (

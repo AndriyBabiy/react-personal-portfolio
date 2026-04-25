@@ -12,7 +12,7 @@ import linkedinLight from "../../assets/linkedin-light.svg";
 import githubDark from "../../assets/github-dark.svg";
 import linkedinDark from "../../assets/linkedin-dark.svg";
 import { useTheme } from "../../common/ThemeContext";
-import { profile } from "../../data/content";
+import { profile, siteConfig } from "../../data/content";
 
 function Hero() {
   const { theme, toggleTheme } = useTheme();
@@ -61,10 +61,10 @@ function Hero() {
         </p>
         <div className={styles.actions}>
           <a href={profile.cvPath} target="_blank">
-            <button className="hover">Resume</button>
+            <button className="hover">{siteConfig?.hero?.resumeButtonText || "Resume"}</button>
           </a>
           <Link to="/desktop" className={styles.desktopLink}>
-            Try the Desktop Experience &rarr;
+            {siteConfig?.hero?.desktopLinkText || "Try the Desktop Experience \u2192"}
           </Link>
         </div>
       </div>

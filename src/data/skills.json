@@ -1,0 +1,49 @@
+{
+  "skills": [
+    {
+      "category": "Languages",
+      "items": [
+        "JavaScript",
+        "TypeScript",
+        "Python",
+        "Java",
+        "C"
+      ]
+    },
+    {
+      "category": "Frontend",
+      "items": [
+        "React",
+        "Next.js",
+        "HTML/CSS",
+        "Tailwind"
+      ]
+    },
+    {
+      "category": "Backend",
+      "items": [
+        "Node.js",
+        "Express",
+        "REST APIs",
+        "PostgreSQL"
+      ]
+    },
+    {
+      "category": "Tools",
+      "items": [
+        "Git",
+        "Docker",
+        "AWS",
+        "CI/CD"
+      ]
+    },
+    {
+      "category": "Other",
+      "items": [
+        "Machine Learning",
+        "Growth Marketing",
+        "Agile"
+      ]
+    }
+  ]
+}
