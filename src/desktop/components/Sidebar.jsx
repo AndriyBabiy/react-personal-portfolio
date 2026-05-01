@@ -1,6 +1,13 @@
 import './Sidebar.css';
 
-const DockIcon = ({ icon, color }) => {
+const DockIcon = ({ icon, color, iconPath, name }) => {
+  if (iconPath) {
+    return (
+      <div className={`dock-icon-bg dock-icon-image dock-icon-${icon}`}>
+        <img src={iconPath} alt={name || icon} draggable={false} />
+      </div>
+    );
+  }
   const icons = {
     cv: (
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -11,10 +18,13 @@ const DockIcon = ({ icon, color }) => {
         <polyline points="10 9 9 9 8 9" />
       </svg>
     ),
-    video: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <polygon points="23 7 16 12 23 17 23 7" />
-        <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+    blog: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M4 4h12a3 3 0 0 1 3 3v13H7a3 3 0 0 1-3-3V4z" />
+        <path d="M4 4v13a3 3 0 0 0 3 3" opacity="0" />
+        <line x1="8" y1="9" x2="15" y2="9" />
+        <line x1="8" y1="13" x2="15" y2="13" />
+        <line x1="8" y1="17" x2="13" y2="17" />
       </svg>
     ),
     projects: (
@@ -40,6 +50,19 @@ const DockIcon = ({ icon, color }) => {
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
         <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+      </svg>
+    ),
+    studio: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M12 20h9" />
+        <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4z" />
+      </svg>
+    ),
+    browser: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M3 12h18" />
+        <path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18" />
       </svg>
     ),
     launchpad: (
@@ -76,20 +99,47 @@ const DockIcon = ({ icon, color }) => {
 const DEFAULT_DOCK = [
   { id: 'launchpad', name: 'Launchpad', color: 'linear-gradient(135deg, #3a3a3c, #1c1c1e)', action: 'launchpad' },
   { id: 'cv', name: 'CV', color: 'linear-gradient(135deg, #007AFF, #0051D5)' },
-  { id: 'video', name: 'Video', color: 'linear-gradient(135deg, #FF3B30, #D42A20)' },
+  { id: 'blog', name: 'Blog', color: 'linear-gradient(135deg, #FF9500, #C77700)' },
   { id: 'projects', name: 'Projects', color: 'linear-gradient(135deg, #34C759, #248A3D)' },
   { id: 'about', name: 'About', color: 'linear-gradient(135deg, #5856D6, #3634A3)' },
-  { id: 'contact', name: 'Contact', color: 'linear-gradient(135deg, #FF9500, #C77700)' },
-  { id: 'trash', name: 'Trash', color: 'linear-gradient(135deg, #8e8e93, #48484a)', divider: true },
+  { id: 'contact', name: 'Contact', color: 'linear-gradient(135deg, #34AADC, #0A84FF)' },
+  { id: 'trash', name: 'Trash', color: 'linear-gradient(135deg, #8e8e93, #48484a)' },
 ];
 
-const Sidebar = ({ onAppClick, onLaunchpadOpen, openWindowIds = [], minimizedWindowIds = [], desktopConfig }) => {
-  const apps = (desktopConfig?.dock || DEFAULT_DOCK).map((app) => ({
-    ...app,
-    icon: app.id,
-  }));
+const renderDockButton = ({ app, openWindowIds, minimizedWindowIds, onClick, extraClass = '' }) => {
+  const targetId = app.target || app.id;
+  const isOpen = openWindowIds.includes(targetId) && app.action !== 'launchpad';
+  const isMinimized = minimizedWindowIds.includes(targetId);
+  const trashClass = app.id === 'trash' ? 'dock-item-trash' : '';
+  return (
+    <button
+      key={app.id}
+      className={`dock-item ${trashClass} ${extraClass}`.trim()}
+      onClick={onClick}
+      aria-label={`Open ${app.name}`}
+    >
+      <DockIcon icon={app.icon || app.id} color={app.color} iconPath={app.iconPath} name={app.name} />
+      <span className="dock-label">{app.name}</span>
+      {isOpen && (
+        <span className={`dock-active-dot ${isMinimized ? 'minimized' : ''}`} />
+      )}
+    </button>
+  );
+};
 
-  const handleClick = (app) => {
+const Sidebar = ({
+  onAppClick,
+  onLaunchpadOpen,
+  openWindowIds = [],
+  minimizedWindowIds = [],
+  desktopConfig,
+  runningApps = [],
+}) => {
+  const dockConfig = desktopConfig?.dock || DEFAULT_DOCK;
+  const trashApp = dockConfig.find((app) => app.id === 'trash');
+  const pinnedApps = dockConfig.filter((app) => app.id !== 'trash');
+
+  const handlePinnedClick = (app) => {
     if (app.action === 'launchpad') {
       onLaunchpadOpen?.();
       return;
@@ -101,32 +151,52 @@ const Sidebar = ({ onAppClick, onLaunchpadOpen, openWindowIds = [], minimizedWin
     onAppClick(app);
   };
 
+  const handleRunningClick = (app) => {
+    onAppClick({ id: app.id, name: app.name });
+  };
+
   return (
     <div className="dock-container">
-      <div className="dock">
-        {apps.flatMap((app) => {
-          const button = (
-            <button
-              key={app.id}
-              className={`dock-item ${app.id === 'trash' ? 'dock-item-trash' : ''}`}
-              onClick={() => handleClick(app)}
-              aria-label={`Open ${app.name}`}
-            >
-              <DockIcon icon={app.icon} color={app.color} />
-              <span className="dock-label">{app.name}</span>
-              {openWindowIds.includes(app.target || app.id) && app.action !== 'launchpad' && (
-                <span className={`dock-active-dot ${minimizedWindowIds.includes(app.target || app.id) ? 'minimized' : ''}`} />
+      <div className="dock" role="toolbar" aria-label="Dock">
+        <div className="dock-region dock-region-pinned" role="group" aria-label="Pinned apps">
+          {pinnedApps.map((app) =>
+            renderDockButton({
+              app,
+              openWindowIds,
+              minimizedWindowIds,
+              onClick: () => handlePinnedClick(app),
+            })
+          )}
+        </div>
+        {runningApps.length > 0 && (
+          <>
+            <div className="dock-divider" aria-hidden="true" />
+            <div className="dock-region dock-region-running" role="group" aria-label="Running apps">
+              {runningApps.map((app) =>
+                renderDockButton({
+                  app,
+                  openWindowIds,
+                  minimizedWindowIds,
+                  onClick: () => handleRunningClick(app),
+                  extraClass: 'dock-item-running',
+                })
               )}
-            </button>
-          );
-          if (app.divider) {
-            return [
-              <div key={`${app.id}-divider`} className="dock-divider" aria-hidden="true" />,
-              button,
-            ];
-          }
-          return [button];
-        })}
+            </div>
+          </>
+        )}
+        {trashApp && (
+          <>
+            <div className="dock-divider" aria-hidden="true" />
+            <div className="dock-region dock-region-trash" role="group" aria-label="Trash">
+              {renderDockButton({
+                app: trashApp,
+                openWindowIds,
+                minimizedWindowIds,
+                onClick: () => handlePinnedClick(trashApp),
+              })}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

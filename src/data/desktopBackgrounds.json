@@ -3,5 +3,15 @@
     "/uploads/backgrounds/IMG_2659.AVIF",
     "/uploads/backgrounds/IMG_2658.AVIF",
     "/uploads/backgrounds/default.jpg"
-  ]
+  ],
+  "captions": {
+    "/uploads/backgrounds/IMG_2659.AVIF": {
+      "title": "Ternopil, Ukraine",
+      "detail": "AI-generated perspective, 2022"
+    },
+    "/uploads/backgrounds/IMG_2658.AVIF": {
+      "title": "Lviv, Ukraine",
+      "detail": "AI-generated perspective, 2022"
+    }
+  }
 }

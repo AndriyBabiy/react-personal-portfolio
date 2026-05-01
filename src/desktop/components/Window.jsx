@@ -35,10 +35,15 @@ const Window = ({
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [resizeStart, setResizeStart] = useState(null);
   const windowRef = useRef(null);
+  const onGeometryChangeRef = useRef(onGeometryChange);
 
   useEffect(() => {
-    onGeometryChange?.({ position, size, maximized });
-  }, [position, size, maximized, onGeometryChange]);
+    onGeometryChangeRef.current = onGeometryChange;
+  });
+
+  useEffect(() => {
+    onGeometryChangeRef.current?.({ position, size, maximized });
+  }, [position, size, maximized]);
 
   const handleMouseDownOnWindow = () => {
     onFocus?.();

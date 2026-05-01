@@ -42,7 +42,6 @@ collections:
               - { name: github, label: GitHub URL, widget: string }
               - { name: linkedin, label: LinkedIn URL, widget: string }
               - { name: cvPath, label: CV Path, widget: string }
-              - { name: videoPath, label: Video Path, widget: string }
               - { name: profileImage, label: Profile Image, widget: image }
 
       - label: Projects
@@ -108,6 +107,12 @@ collections:
                 widget: object
                 fields:
                   - { name: text, label: "Footer Text (supports {year})", widget: string }
+              - name: studio
+                label: Studio (Local Editor)
+                widget: object
+                fields:
+                  - { name: passphrase, label: "Passphrase (gates the in-browser Studio app)", widget: string, required: false }
+                  - { name: publishUrl, label: "Publish URL (defaults to /admin/)", widget: string, required: false }
 
       - label: Desktop Experience
         name: desktopConfig
@@ -131,7 +136,7 @@ collections:
                 label: Dock Apps
                 widget: list
                 fields:
-                  - { name: id, label: ID, widget: string, hint: "Must match a known icon id (cv, video, projects, about, contact, studyie)" }
+                  - { name: id, label: ID, widget: string, hint: "Must match a known icon id (cv, blog, projects, about, contact, studyie)" }
                   - { name: name, label: Name, widget: string }
                   - { name: color, label: Color (CSS gradient), widget: string }
                   - { name: externalUrl, label: External URL (optional), widget: string, required: false }
@@ -144,7 +149,7 @@ collections:
                     fields:
                       - { name: width, widget: number, value_type: int }
                       - { name: height, widget: number, value_type: int }
-                  - name: video
+                  - name: blog
                     widget: object
                     fields:
                       - { name: width, widget: number, value_type: int }

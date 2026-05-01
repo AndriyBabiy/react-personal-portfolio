@@ -12,10 +12,13 @@ import linkedinLight from "../../assets/linkedin-light.svg";
 import githubDark from "../../assets/github-dark.svg";
 import linkedinDark from "../../assets/linkedin-dark.svg";
 import { useTheme } from "../../common/ThemeContext";
-import { profile, siteConfig } from "../../data/content";
+import { siteConfig } from "../../data/content";
+import { useStudioContent } from "../../desktop/hooks/useStudioContent";
 
 function Hero() {
   const { theme, toggleTheme } = useTheme();
+  const profile = useStudioContent("profile") || {};
+  const roles = profile.roles || [];
 
   const themeIcon = theme === "light" ? sun : moon;
   const emailIcon = theme === "light" ? emailLight : emailDark;
@@ -38,10 +41,10 @@ function Hero() {
           {profile.firstName} <br /> {profile.lastName}
         </h1>
         <h2>
-          {profile.roles.map((role, i) => (
+          {roles.map((role, i) => (
             <Fragment key={role}>
               {role}
-              {i < profile.roles.length - 1 && <br />}
+              {i < roles.length - 1 && <br />}
             </Fragment>
           ))}
         </h2>

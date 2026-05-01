@@ -1,7 +1,8 @@
-import { profile } from '../../data/content';
+import { useStudioContent } from '../hooks/useStudioContent';
 import './PDFViewer.css';
 
 const PDFViewer = () => {
+  const profile = useStudioContent('profile') || {};
   return (
     <div className="pdf-viewer">
       <iframe

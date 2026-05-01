@@ -1,7 +1,9 @@
 import './ContactApp.css';
-import { profile, desktopConfig } from '../../data/content';
+import { useStudioContent } from '../hooks/useStudioContent';
 
 const ContactApp = () => {
+  const profile = useStudioContent("profile");
+  const desktopConfig = useStudioContent("desktopConfig");
   return (
     <div className="contact-app">
       <div className="contact-header">

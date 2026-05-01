@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router';
 import './TopBar.css';
 
@@ -9,8 +9,12 @@ const HomeLogo = () => (
   </svg>
 );
 
-const TopBar = ({ onBackgroundChange, desktopConfig }) => {
+const EDIT_MENU_ID = "Edit";
+
+const TopBar = ({ onBackgroundChange, onOpenStudio, desktopConfig }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [openMenu, setOpenMenu] = useState(null);
+  const menuRef = useRef(null);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -19,21 +23,105 @@ const TopBar = ({ onBackgroundChange, desktopConfig }) => {
     return () => clearInterval(timer);
   }, []);
 
-  const formatDate = (date) => {
-    return date.toLocaleDateString('en-US', {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric',
-    });
+  useEffect(() => {
+    if (!openMenu) return undefined;
+    const onDocClick = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setOpenMenu(null);
+      }
+    };
+    const onKey = (e) => {
+      if (e.key === "Escape") setOpenMenu(null);
+    };
+    document.addEventListener("mousedown", onDocClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDocClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [openMenu]);
+
+  const formatDate = (date) => date.toLocaleDateString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+  });
+
+  const formatTime = (date) => date.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+  });
+
+  const menuItems = desktopConfig?.topBar?.menuItems || ["File", "Edit", "View", "Help"];
+
+  const renderMenuItem = (item) => {
+    if (item === EDIT_MENU_ID) {
+      const expanded = openMenu === EDIT_MENU_ID;
+      return (
+        <div key={item} className="menu-item-wrap" ref={expanded ? menuRef : null}>
+          <button
+            type="button"
+            className={`menu-item menu-item-button ${expanded ? "open" : ""}`}
+            onClick={() => setOpenMenu(expanded ? null : EDIT_MENU_ID)}
+            aria-haspopup="menu"
+            aria-expanded={expanded ? "true" : "false"}
+          >
+            {item}
+          </button>
+          {expanded ? (
+            <div className="menu-dropdown" role="menu" aria-label="Edit menu">
+              <button
+                type="button"
+                role="menuitem"
+                className="menu-dropdown-item"
+                onClick={() => {
+                  setOpenMenu(null);
+                  onOpenStudio?.();
+                }}
+              >
+                <span>Open Studio…</span>
+                <span className="menu-dropdown-shortcut">⌘E</span>
+              </button>
+              <div className="menu-dropdown-divider" />
+              <button
+                type="button"
+                role="menuitem"
+                className="menu-dropdown-item disabled"
+                disabled
+              >
+                <span>Undo</span>
+                <span className="menu-dropdown-shortcut">⌘Z</span>
+              </button>
+              <button
+                type="button"
+                role="menuitem"
+                className="menu-dropdown-item disabled"
+                disabled
+              >
+                <span>Redo</span>
+                <span className="menu-dropdown-shortcut">⇧⌘Z</span>
+              </button>
+            </div>
+          ) : null}
+        </div>
+      );
+    }
+    return (
+      <span key={item} className="menu-item">{item}</span>
+    );
   };
 
-  const formatTime = (date) => {
-    return date.toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true,
-    });
-  };
+  useEffect(() => {
+    const onShortcut = (e) => {
+      if ((e.metaKey || e.ctrlKey) && !e.shiftKey && e.key.toLowerCase() === "e") {
+        e.preventDefault();
+        onOpenStudio?.();
+      }
+    };
+    window.addEventListener("keydown", onShortcut);
+    return () => window.removeEventListener("keydown", onShortcut);
+  }, [onOpenStudio]);
 
   return (
     <div className="top-bar">
@@ -42,9 +130,7 @@ const TopBar = ({ onBackgroundChange, desktopConfig }) => {
           <HomeLogo />
         </Link>
         <span className="menu-item active">{desktopConfig?.topBar?.title || "Portfolio OS"}</span>
-        {(desktopConfig?.topBar?.menuItems || ["File", "Edit", "View", "Help"]).map((item) => (
-          <span key={item} className="menu-item">{item}</span>
-        ))}
+        {menuItems.map(renderMenuItem)}
       </div>
       <div className="top-bar-right">
         <button

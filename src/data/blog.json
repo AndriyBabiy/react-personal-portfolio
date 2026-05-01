@@ -1,0 +1,42 @@
+{
+  "posts": [
+    {
+      "id": "hello-world",
+      "title": "Hello, world",
+      "date": "2026-04-30",
+      "readingMinutes": 2,
+      "tags": ["meta", "portfolio"],
+      "excerpt": "Why I'm starting a notes section, what to expect, and how it fits into the macOS-portfolio fiction.",
+      "content": [
+        { "type": "paragraph", "text": "This is the first entry in what I plan to keep as a working notebook — half engineering log, half growth-marketing diary. The frame is a Mail.app-style reader because that's where I read most of my own incoming long-form, and a portfolio that pretends to be a desktop should have a place to read." },
+        { "type": "paragraph", "text": "Three things I want to write about here over the next few months:" },
+        { "type": "list", "items": [
+          "**Agent SDK & MCP work** — building reproducible workflows on top of Claude Code, and what breaks when you scale them.",
+          "**Growth analytics, in code** — turning the playbooks I ran at 2K and Atlas Primer into queryable, shippable systems.",
+          "**Self-hosted infra notes** — the Hetzner / Cloudflare / Docker stack that runs my projects, and the small lessons that don't make it into README files."
+        ] },
+        { "type": "paragraph", "text": "If something here is useful, the canonical home is `andriybabiy.com/desktop` → Blog. Everything else is a mirror." }
+      ]
+    },
+    {
+      "id": "macos-portfolio-mobile",
+      "title": "A mobile metaphor for a desktop portfolio",
+      "date": "2026-04-29",
+      "readingMinutes": 3,
+      "tags": ["design", "ux"],
+      "excerpt": "When the metaphor is macOS, what should mobile look like? Notes on swapping Springboard in instead of redirecting away.",
+      "content": [
+        { "type": "paragraph", "text": "The /desktop route on this site is a macOS Sonoma reconstruction — top bar, dock, draggable windows, the whole metaphor. Until today it didn't render gracefully on mobile. The temptation was to redirect phones back to the canvas home page." },
+        { "type": "paragraph", "text": "I went the other way. Below 768px the same route now renders an iOS Springboard: status bar, 4-column app grid, home indicator, fullscreen sheets in place of windows. Same apps, same data, different metaphor." },
+        { "type": "heading", "level": 3, "text": "Why not just shrink the desktop?" },
+        { "type": "paragraph", "text": "Three reasons:" },
+        { "type": "list", "items": [
+          "**Pointer vs. touch.** Dock magnification and draggable windows are pointer-driven. They do not survive a thumb.",
+          "**Discoverability.** iOS Springboard is a metaphor users already have a model for. Free affordances.",
+          "**Consistency of fiction.** If the bit is \"your portfolio is an OS,\" the OS should know what device it's on."
+        ] },
+        { "type": "paragraph", "text": "The implementation is one viewport hook (`useViewportMode`) that picks one of two trees. The app components themselves — About, Projects, Contact, Blog, the PDF viewer — are unchanged; they render inside a Window on desktop and inside a fullscreen sheet on mobile." }
+      ]
+    }
+  ]
+}
