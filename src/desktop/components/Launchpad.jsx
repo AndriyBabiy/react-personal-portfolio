@@ -3,10 +3,11 @@ import "./Launchpad.css";
 
 const DEFAULT_APPS = [
   { id: "cv", name: "CV", color: "linear-gradient(135deg, #007AFF, #0051D5)" },
-  { id: "video", name: "Video", color: "linear-gradient(135deg, #FF3B30, #D42A20)" },
+  { id: "blog", name: "Blog", color: "linear-gradient(135deg, #FF9500, #C77700)" },
   { id: "projects", name: "Projects", color: "linear-gradient(135deg, #34C759, #248A3D)" },
   { id: "about", name: "About", color: "linear-gradient(135deg, #5856D6, #3634A3)" },
-  { id: "contact", name: "Contact", color: "linear-gradient(135deg, #FF9500, #C77700)" },
+  { id: "contact", name: "Contact", color: "linear-gradient(135deg, #34AADC, #0A84FF)" },
+  { id: "studio", name: "Studio", color: "linear-gradient(135deg, #FF2D55, #C9215B)" },
   { id: "studyie", name: "Study.ie", color: "linear-gradient(135deg, #AF52DE, #8944AB)", externalUrl: "https://study.ie" },
 ];
 
@@ -19,10 +20,12 @@ const appGlyphs = {
       <line x1="16" y1="17" x2="8" y2="17" />
     </svg>
   ),
-  video: (
-    <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <polygon points="23 7 16 12 23 17 23 7" />
-      <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+  blog: (
+    <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M4 4h12a3 3 0 0 1 3 3v13H7a3 3 0 0 1-3-3V4z" />
+      <line x1="8" y1="9" x2="15" y2="9" />
+      <line x1="8" y1="13" x2="15" y2="13" />
+      <line x1="8" y1="17" x2="13" y2="17" />
     </svg>
   ),
   projects: (
@@ -46,6 +49,12 @@ const appGlyphs = {
   ),
   studyie: (
     <img src="/uploads/apps/studyie.svg" alt="" width="56" height="56" draggable={false} style={{ borderRadius: 14 }} />
+  ),
+  studio: (
+    <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M12 20h9" />
+      <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4z" />
+    </svg>
   ),
 };
 

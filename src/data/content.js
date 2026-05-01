@@ -6,6 +6,7 @@ import skillsFile from "./skills.json";
 import siteConfigFile from "./siteConfig.json";
 import desktopConfigFile from "./desktopConfig.json";
 import desktopBackgroundsFile from "./desktopBackgrounds.json";
+import blogFile from "./blog.json";
 
 export const profile = profileFile.profile;
 export const projects = projectsFile.projects;
@@ -13,3 +14,5 @@ export const skills = skillsFile.skills;
 export const siteConfig = siteConfigFile.siteConfig;
 export const desktopConfig = desktopConfigFile.desktopConfig;
 export const desktopBackgrounds = desktopBackgroundsFile.desktopBackgrounds;
+export const backgroundCaptions = desktopBackgroundsFile.captions || {};
+export const blogPosts = blogFile.posts;

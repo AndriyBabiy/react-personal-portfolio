@@ -1,5 +1,5 @@
 import './ProjectsApp.css';
-import { projects, desktopConfig } from '../../data/content';
+import { useStudioContent } from '../hooks/useStudioContent';
 
 const ExternalLinkIcon = () => (
   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -9,7 +9,15 @@ const ExternalLinkIcon = () => (
   </svg>
 );
 
-const ProjectsApp = () => {
+const ProjectsApp = ({ onOpenBrowser }) => {
+  const projects = useStudioContent("projects");
+  const desktopConfig = useStudioContent("desktopConfig");
+  const handleOpen = (project, e) => {
+    if (onOpenBrowser) {
+      e.preventDefault();
+      onOpenBrowser({ url: project.link, title: project.title });
+    }
+  };
   return (
     <div className="projects-app">
       <div className="projects-header">
@@ -24,6 +32,7 @@ const ProjectsApp = () => {
             target="_blank"
             rel="noopener noreferrer"
             className="project-card"
+            onClick={(e) => handleOpen(project, e)}
           >
             <div className="project-card-header">
               <h3>{project.title}</h3>

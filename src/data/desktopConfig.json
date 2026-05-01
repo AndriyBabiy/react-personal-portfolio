@@ -22,9 +22,9 @@
         "color": "linear-gradient(135deg, #007AFF, #0051D5)"
       },
       {
-        "id": "video",
-        "name": "Video",
-        "color": "linear-gradient(135deg, #FF3B30, #D42A20)"
+        "id": "blog",
+        "name": "Blog",
+        "color": "linear-gradient(135deg, #FF9500, #C77700)"
       },
       {
         "id": "projects",
@@ -39,22 +39,32 @@
       {
         "id": "contact",
         "name": "Contact",
-        "color": "linear-gradient(135deg, #FF9500, #C77700)"
+        "color": "linear-gradient(135deg, #34AADC, #0A84FF)"
       },
       {
         "id": "trash",
         "name": "Trash",
-        "color": "linear-gradient(135deg, #8e8e93, #48484a)",
-        "divider": true
+        "color": "linear-gradient(135deg, #8e8e93, #48484a)"
       }
     ],
+    "unpinnedApps": {
+      "studio": {
+        "name": "Studio",
+        "color": "linear-gradient(135deg, #FF2D55, #C9215B)"
+      },
+      "cuigg": {
+        "name": "Cuigg",
+        "iconPath": "/uploads/apps/cuigg.png"
+      }
+    },
     "windowSizes": {
       "cv": { "width": 700, "height": 500 },
-      "video": { "width": 720, "height": 460 },
+      "blog": { "width": 760, "height": 540 },
       "projects": { "width": 520, "height": 480 },
       "about": { "width": 480, "height": 560 },
       "contact": { "width": 440, "height": 400 },
-      "trash": { "width": 520, "height": 380 }
+      "trash": { "width": 520, "height": 380 },
+      "studio": { "width": 880, "height": 600 }
     },
     "aboutApp": {
       "aboutHeading": "About",
@@ -81,6 +91,12 @@
         "name": "Study.ie",
         "iconPath": "/uploads/apps/studyie.svg",
         "externalUrl": "https://study.ie"
+      },
+      {
+        "id": "cuigg",
+        "name": "Cuigg",
+        "iconPath": "/uploads/apps/cuigg.png",
+        "externalUrl": "https://cuigg.study.ie"
       }
     ]
   }

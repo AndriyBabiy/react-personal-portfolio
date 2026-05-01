@@ -1,7 +1,10 @@
 import './AboutApp.css';
-import { profile, skills, desktopConfig } from '../../data/content';
+import { useStudioContent } from '../hooks/useStudioContent';
 
 const AboutApp = () => {
+  const profile = useStudioContent("profile");
+  const skills = useStudioContent("skills");
+  const desktopConfig = useStudioContent("desktopConfig");
   return (
     <div className="about-app">
       <div className="about-hero">

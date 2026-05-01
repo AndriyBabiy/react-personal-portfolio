@@ -1,0 +1,39 @@
+.bg-caption {
+  position: fixed;
+  right: 16px;
+  bottom: calc(86px + env(safe-area-inset-bottom, 0));
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  pointer-events: none;
+  user-select: none;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+  text-align: right;
+  color: rgba(255, 255, 255, 0.78);
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.55),
+    0 0 6px rgba(0, 0, 0, 0.35);
+  letter-spacing: 0.1px;
+}
+
+.bg-caption-title {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.bg-caption-detail {
+  font-size: 10.5px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.62);
+  line-height: 1.2;
+}
+
+@media (max-width: 768px) {
+  .bg-caption {
+    bottom: calc(28px + env(safe-area-inset-bottom, 0));
+    right: 12px;
+  }
+}

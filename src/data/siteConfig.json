@@ -13,6 +13,10 @@
     },
     "footer": {
       "text": "© {year} Andriy Babiy"
+    },
+    "studio": {
+      "passphrase": "let-me-in",
+      "publishUrl": "/admin/"
     }
   }
 }
